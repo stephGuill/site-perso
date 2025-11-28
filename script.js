@@ -59,3 +59,23 @@ function updateNavigation() {
 }
 
 window.addEventListener('scroll', updateNavigation);
+
+// =====Smooth scrolling pour les liens d'ancrage
+// ==============================================
+function soothSchroll() {
+    navLinks.forEach( link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.getAttribute('href');
+            const targetSection = document.querySelector(targetId);
+
+            if (targetSection) { 
+                targetSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+
+        });
+    });
+}
