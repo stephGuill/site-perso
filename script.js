@@ -1,162 +1,448 @@
-// ========Variables globales=============
-// =======================================
-const navbar = document.querySelector('.nabar');
-const navToggle = document.querySelector('.nav-toggle');
-const navMenu = document.querySelector('.nav-menu');
-const navLinks = document.querySelectorAll('.nav-links');
-const sections = document.querySelectorAll('.section');
-const portfolioItems = document.querySelectorAll('.portfolio-item');
-const filterButtons = document.querySelectorAll('.filter-btn');
-const modal = document.getElementById('portfolioModal');
-const modalClose = document.querySelector('.modal-close');
-const contactForm = document.getElementById('contactForm');
-const statNumbers = document.querySelectorAll('.stat-number');
+/* 
+===============================================
+PORTFOLIO WEBDESIGNER - JAVASCRIPT
+===============================================
+Auteur: StephGraph
+Description: Fonctionnalités interactives et animations
+Technologies: JavaScript Vanilla (ES6+)
+APIs utilisées: Intersection Observer, localStorage, Service Worker
 
-// =========Navigation mobile=======
-// =================================
-function toggleMobileMenu() {
-    navMenu.classList.toggle('active');
-    navToggle.classList.toggle('active');
+STRUCTURE DU FICHIER:
+1. Variables globales
+2. Menu mobile
+3. Navigation (scroll spy, sticky header)
+4. Animations (compteurs, parallaxe, particules)
+5. Portfolio (filtres, modal)
+6. Formulaire de contact
+7. Effets visuels (curseur, tilt 3D, ripple)
+8. Optimisations et accessibilité
+===============================================
+*/
+
+// ================================
+// VARIABLES GLOBALES
+// ================================
+// Sélection des éléments DOM principaux utilisés dans plusieurs fonctions
+// querySelector() = sélectionne le PREMIER élément correspondant au sélecteur CSS
+// querySelectorAll() = sélectionne TOUS les éléments correspondants (retourne NodeList)
+
+const navbar = document.querySelector('.navbar'); // Barre de navigation pour effet sticky
+const navToggle = document.querySelector('.nav-toggle'); // Bouton burger menu mobile
+const navMenu = document.querySelector('.nav-menu'); // Menu de navigation (ul)
+const navLinks = document.querySelectorAll('.nav-link'); // Tous les liens du menu (a)
+const sections = document.querySelectorAll('section'); // Toutes les sections pour scroll spy
+const portfolioItems = document.querySelectorAll('.portfolio-item'); // Projets du portfolio
+const filterButtons = document.querySelectorAll('.filter-btn'); // Boutons de filtre portfolio
+const modal = document.getElementById('portfolioModal'); // Modal pour détails projet
+const modalClose = document.querySelector('.modal-close'); // Bouton fermeture modal
+const contactForm = document.getElementById('contactForm'); // Formulaire de contact
+const statNumbers = document.querySelectorAll('.stat-number'); // Chiffres des statistiques à animer
+
+// ================================
+// EFFET DE CURSEUR PERSONNALISÉ
+// ================================
+// Remplace le curseur par défaut par un curseur stylisé avec:
+// - Un point central qui suit immédiatement la souris
+// - Un cercle externe avec animation de suivi retardé (effet smooth)
+// - Agrandissement au survol des éléments interactifs
+function initCustomCursor() {
+    // 1. CRÉATION DU CURSEUR
+    const cursor = document.createElement('div'); // Crée une div pour le curseur
+    cursor.className = 'custom-cursor'; // Ajoute la classe CSS
+    cursor.innerHTML = '<div class="cursor-dot"></div><div class="cursor-outline"></div>'; // 2 éléments: point + cercle
+    document.body.appendChild(cursor); // Ajoute le curseur au body
+
+    // 2. SÉLECTION DES SOUS-ÉLÉMENTS
+    const cursorDot = cursor.querySelector('.cursor-dot'); // Point central (8px)
+    const cursorOutline = cursor.querySelector('.cursor-outline'); // Cercle externe (30px)
+
+    // 3. VARIABLES DE POSITION
+    let mouseX = 0, mouseY = 0; // Position actuelle de la souris
+    let outlineX = 0, outlineY = 0; // Position actuelle du cercle (avec délai)
+
+    // 4. SUIVI DE LA SOURIS
+    document.addEventListener('mousemove', (e) => {
+        // e.clientX/Y = coordonnées de la souris par rapport à la fenêtre
+        mouseX = e.clientX; // Sauvegarde X
+        mouseY = e.clientY; // Sauvegarde Y
+        // Le point suit immédiatement la souris
+        cursorDot.style.left = e.clientX + 'px';
+        cursorDot.style.top = e.clientY + 'px';
+    });
+
+    // 5. ANIMATION FLUIDE POUR LE CERCLE (avec délai)
+    function animateOutline() {
+        // Formule d'interpolation linéaire (lerp): nouvelle_pos = ancienne_pos + (cible - ancienne_pos) * vitesse
+        // 0.15 = vitesse de suivi (plus petit = plus lent)
+        outlineX += (mouseX - outlineX) * 0.15; // Calcule nouvelle position X
+        outlineY += (mouseY - outlineY) * 0.15; // Calcule nouvelle position Y
+        cursorOutline.style.left = outlineX + 'px'; // Applique X
+        cursorOutline.style.top = outlineY + 'px'; // Applique Y
+        requestAnimationFrame(animateOutline); // Rappelle la fonction à chaque frame (60fps)
+    }
+    animateOutline(); // Lance l'animation
+
+    // 6. EFFET HOVER SUR ÉLÉMENTS INTERACTIFS
+    const interactiveElements = document.querySelectorAll('a, button, .btn, .portfolio-item, .nav-link');
+    interactiveElements.forEach(el => {
+        // mouseenter = souris entre dans l'élément
+        el.addEventListener('mouseenter', () => {
+            cursor.classList.add('cursor-hover'); // Ajoute classe pour agrandir le curseur (CSS)
+        });
+        // mouseleave = souris sort de l'élément
+        el.addEventListener('mouseleave', () => {
+            cursor.classList.remove('cursor-hover'); // Retire classe pour taille normale
+        });
+    });
 }
 
-// Event listeners pour la navigation mobile
+// ================================
+// Effet de particules dans le hero
+// ================================
+function initParticles() {
+    const hero = document.querySelector('.hero');
+    if (!hero) return;
+
+    const particlesContainer = document.createElement('div');
+    particlesContainer.className = 'particles';
+    hero.appendChild(particlesContainer);
+
+    for (let i = 0; i < 30; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 15 + 's';
+        particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+        particlesContainer.appendChild(particle);
+    }
+}
+
+// ================================
+// Effet de saisie animée (typing effect)
+// ================================
+function initTypingEffect() {
+    const subtitle = document.querySelector('.hero-subtitle');
+    if (!subtitle) return;
+
+    const text = subtitle.textContent;
+    subtitle.textContent = '';
+    subtitle.style.borderRight = '2px solid rgba(255,255,255,0.7)';
+    
+    let charIndex = 0;
+    
+    function type() {
+        if (charIndex < text.length) {
+            subtitle.textContent += text.charAt(charIndex);
+            charIndex++;
+            setTimeout(type, 100);
+        } else {
+            setTimeout(() => {
+                subtitle.style.borderRight = 'none';
+            }, 500);
+        }
+    }
+    
+    setTimeout(type, 1000);
+}
+
+// ================================
+// Effet de ripple sur les boutons
+// ================================
+function initRippleEffect() {
+    const buttons = document.querySelectorAll('.btn, .filter-btn, .portfolio-link');
+    
+    buttons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            const ripple = document.createElement('span');
+            ripple.className = 'ripple-effect';
+            
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+            
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            
+            this.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        });
+    });
+}
+
+// ================================
+// Effet de tilt 3D sur les cartes
+// ================================
+function initTiltEffect() {
+    const cards = document.querySelectorAll('.service-card, .skill-item, .portfolio-item');
+    
+    cards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = (y - centerY) / 10;
+            const rotateY = (centerX - x) / 10;
+            
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+        });
+    });
+}
+
+// ================================
+// Progress bar de scroll
+// ================================
+function initScrollProgress() {
+    const progressBar = document.createElement('div');
+    progressBar.className = 'scroll-progress';
+    progressBar.innerHTML = '<div class="scroll-progress-bar"></div>';
+    document.body.appendChild(progressBar);
+    
+    const progressBarFill = progressBar.querySelector('.scroll-progress-bar');
+    
+    window.addEventListener('scroll', () => {
+        const scrollTop = window.pageYOffset;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollPercent = (scrollTop / docHeight) * 100;
+        
+        progressBarFill.style.width = scrollPercent + '%';
+    });
+}
+
+// ================================
+// Compteur de statistiques amélioré
+// ================================
+function enhancedCounters() {
+    statNumbers.forEach(counter => {
+        counter.style.transition = 'transform 0.3s ease';
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    counter.style.transform = 'scale(1.2)';
+                    setTimeout(() => {
+                        counter.style.transform = 'scale(1)';
+                    }, 300);
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        observer.observe(counter);
+    });
+}
+
+// ================================
+// NAVIGATION MOBILE (Menu Burger)
+// ================================
+// Gère l'ouverture/fermeture du menu sur mobile et tablette
+// Le menu burger (3 barres) est visible uniquement en mode responsive
+
+// FONCTION: Basculer l'état du menu (ouvert/fermé)
+function toggleMobileMenu() {
+    // toggle() = ajoute la classe si absente, retire si présente
+    navMenu.classList.toggle('active'); // Active/désactive le menu (slide depuis la droite)
+    navToggle.classList.toggle('active'); // Transforme le burger en X
+}
+
+// EVENT LISTENER 1: Click sur le bouton burger
 navToggle.addEventListener('click', toggleMobileMenu);
 
+// EVENT LISTENER 2: Click sur un lien du menu
+// forEach = boucle sur tous les liens du menu
 navLinks.forEach(link => {
     link.addEventListener('click', () => {
-        navMenu.classList.remove('active');
-        navToggle.classList.remove('active');
+        // Quand on clique un lien, on ferme le menu
+        navMenu.classList.remove('active'); // Retire classe active du menu
+        navToggle.classList.remove('active'); // Remet le burger normal
     });
 });
 
-// ====Navigation sticky et active links=====
-// ==========================================
+// ================================
+// NAVIGATION STICKY & ACTIVE LINKS (Scroll Spy)
+// ================================
+// Deux fonctionnalités combinées:
+// 1. Navbar sticky: change de style au scroll (fond plus opaque)
+// 2. Active link: met en surbrillance le lien correspondant à la section visible
+
 function updateNavigation() {
-    // Navigation sticky
-    if (window.scrolly > 100) {
-        navbar.classList.add('scrolled');
+    // ─────────────────────────────────
+    // 1. NAVBAR STICKY
+    // ─────────────────────────────────
+    // window.scrollY = nombre de pixels scrollés depuis le haut
+    if (window.scrollY > 100) { // Si on a scrollé plus de 100px
+        navbar.classList.add('scrolled'); // Ajoute classe 'scrolled' (fond plus foncé, ombre plus forte)
     } else {
-        navbar.classList.remove('scrolled');
+        navbar.classList.remove('scrolled'); // Retire classe si on remonte en haut
     }
 
-     // Active navigation links
-    let current = '';
+    // ─────────────────────────────────
+    // 2. ACTIVE LINK (Scroll Spy)
+    // ─────────────────────────────────
+    // Détermine quelle section est actuellement visible
+    let current = ''; // Variable pour stocker l'ID de la section courante
+    
+    // Boucle sur toutes les sections du site
     sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
+        const sectionTop = section.offsetTop; // Position top de la section par rapport au document
+        const sectionHeight = section.clientHeight; // Hauteur de la section en pixels
         
+        // Si on a scrollé jusqu'à cette section (avec marge de 200px)
         if (window.scrollY >= sectionTop - 200) {
-            current = section.getAttribute('id');
+            current = section.getAttribute('id'); // Récupère l'ID (ex: "about", "services")
         }
     });
 
-     navLinks.forEach(link => {
-        link.classList.remove('active');
+    // Met à jour les classes 'active' sur les liens
+    navLinks.forEach(link => {
+        link.classList.remove('active'); // Retire 'active' de tous les liens
+        // Si le href du lien correspond à l'ID de la section courante
         if (link.getAttribute('href') === `#${current}`) {
-            link.classList.add('active');
+            link.classList.add('active'); // Ajoute 'active' au lien correspondant
         }
     });
 }
 
+// ÉCOUTE L'ÉVÉNEMENT SCROLL
+// À chaque scroll, la fonction updateNavigation() est appelée
 window.addEventListener('scroll', updateNavigation);
 
-// =====Smooth scrolling pour les liens d'ancrage
-// ==============================================
-function soothSchroll() {
-    navLinks.forEach( link => {
+// ================================
+// Smooth scrolling pour les liens d'ancrage
+// ================================
+function smoothScroll() {
+    navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             const targetId = link.getAttribute('href');
             const targetSection = document.querySelector(targetId);
-
-            if (targetSection) { 
+            
+            if (targetSection) {
                 targetSection.scrollIntoView({
                     behavior: 'smooth',
                     block: 'start'
                 });
             }
-
         });
     });
 }
 
-smoothSchroll();
+smoothScroll();
 
-// =====Animation des compteurs====
 // ================================
+// ANIMATION DES COMPTEURS (Count Up)
+// ================================
+// Anime les chiffres des statistiques de 0 vers leur valeur finale
+// Utilise l'Intersection Observer API pour déclencher uniquement quand visible
+
 function animateCounters() {
-    const observOptions = {
-        threshold: 0.5,
-        rootMargin: '0px 0px -100px 0px'
+    // ─────────────────────────────────
+    // 1. CONFIGURATION DE L'OBSERVER
+    // ─────────────────────────────────
+    const observerOptions = {
+        threshold: 0.5, // L'élément doit être visible à 50% (0.5 = 50%)
+        rootMargin: '0px 0px -100px 0px' // Marge: déclenche 100px avant que l'élément soit visible
     };
 
+    // ─────────────────────────────────
+    // 2. CRÉATION DE L'INTERSECTION OBSERVER
+    // ─────────────────────────────────
+    // Observer = surveille quand un élément devient visible dans le viewport
     const observer = new IntersectionObserver((entries) => {
+        // entries = tableau d'éléments observés qui ont changé de visibilité
         entries.forEach(entry => {
+            // isIntersecting = true si l'élément est visible
             if (entry.isIntersecting) {
-                const counter = entry.target;
-                const target = parseInt(counter.getAttribute('data-count'));
-                let current = 0;
-                const increment = target / 100;
+                const counter = entry.target; // L'élément compteur
+                const target = parseInt(counter.getAttribute('data-count')); // Valeur finale (ex: data-count="150")
+                let current = 0; // Valeur actuelle du compteur (commence à 0)
+                const increment = target / 100; // Incrément à chaque step (divise par 100 pour 100 steps)
+                
+                // ─────────────────────────────────
+                // 3. ANIMATION DU COMPTEUR
+                // ─────────────────────────────────
+                // setInterval = répète une fonction toutes les X millisecondes
                 const timer = setInterval(() => {
-                    current += increment;
-                    if (current => target) {
-                        current = target;
-                        clearInterval(timer);
+                    current += increment; // Augmente la valeur
+                    
+                    // Si on atteint ou dépasse la cible
+                    if (current >= target) {
+                        current = target; // Force la valeur exacte
+                        clearInterval(timer); // Arrête l'animation
                     }
+                    
+                    // Met à jour le texte affiché (arrondi à l'entier inférieur)
                     counter.textContent = Math.floor(current);
-                }, 20);
+                }, 20); // Exécute toutes les 20ms (50 fois par seconde)
+                
+                // Arrête d'observer cet élément (animation ne se déclenche qu'une fois)
                 observer.unobserve(counter);
             }
         });
-    }, observerOption);
+    }, observerOptions);
 
+    // ─────────────────────────────────
+    // 4. OBSERVATION DES COMPTEURS
+    // ─────────────────────────────────
+    // Pour chaque élément .stat-number, on active l'observation
     statNumbers.forEach(counter => {
-        observer.observe(counter);
+        observer.observe(counter); // Commence à surveiller cet élément
     });
-} 
+}
 
+// Lance la fonction
 animateCounters();
 
-// ====Filtrage du portfolio====
-// =============================
+// ================================
+// Filtrage du portfolio
+// ================================
 function initPortfolioFilter() {
     filterButtons.forEach(button => {
         button.addEventListener('click', () => {
-            // Mettre à jour les bouttons actifs
+            // Mettre à jour les boutons actifs
             filterButtons.forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
 
             const filter = button.getAttribute('data-filter');
 
-            // Filtrer les éléments du porfolio
+            // Filtrer les éléments du portfolio
             portfolioItems.forEach(item => {
                 const category = item.getAttribute('data-category');
-
+                
                 if (filter === 'all' || category === filter) {
                     item.classList.remove('hide');
-                     item.style.display = 'block';
+                    item.style.display = 'block';
                 } else {
                     item.classList.add('hide');
                     setTimeout(() => {
                         item.style.display = 'none';
                     }, 300);
-
                 }
-
             });
-
         });
     });
 }
 
 initPortfolioFilter();
 
-// ====Modal du portfolio====
-// ==========================
+// ================================
+// Modal du portfolio
+// ================================
 const projectData = {
     1: {
-        title: "Salle combat mixte Fight Club",
-        description: "Site web responsive pour une salle de sport de combat mixte avec système de réservation en ligne, menu interactif et galerie photos. Le design met l'accent sur la mixité dans les sports de combat. ",
+        title: "Salle de combat mixte Fight Club", 
+        description: "Site web responsive pour une salle de sport de combat mixte avec système de réservation en ligne, menu interactif et galerie photos. Le design met l'accent sur la mixité dans les sports de combat.",
         image: "images/Capture d’écran projet 01.png",
         technologies: ["HTML5", "CSS3","JavaScript"],
         liveLink: "https://stephane-guillamo.students-laplateforme.io/Salle_de_sport_%20Fight%20Club/index.html",
@@ -284,6 +570,7 @@ function initContactForm() {
             
             // Succès
             showNotification('Message envoyé avec succès !', 'success');
+            createConfetti(); // Effet de confettis
             contactForm.reset();
             
         } catch (error) {
@@ -507,13 +794,24 @@ window.addEventListener('error', (e) => {
 // Initialisation au chargement de la page
 // ================================
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Portfolio WebDesigner - Scripts chargés avec succès');
+    console.log('Portfolio WebDesigner - Scripts chargés avec succès ✨');
     
     // Initialiser les animations CSS
     document.body.classList.add('loaded');
     
     // Mettre à jour la navigation initiale
     updateNavigation();
+    
+    // Initialiser les nouveaux effets modernes
+    initCustomCursor();
+    initParticles();
+    initTypingEffect();
+    initRippleEffect();
+    initTiltEffect();
+    initScrollProgress();
+    enhancedCounters();
+    
+    console.log('🎨 Tous les effets visuels sont activés!');
 });
 
 // ================================
@@ -588,3 +886,479 @@ function initAccessibility() {
 
 initAccessibility();
 
+// ================================
+// Badge de statut disponible
+// ================================
+function initAvailabilityBadge() {
+    const badge = document.createElement('div');
+    badge.className = 'availability-badge';
+    badge.innerHTML = `
+        <span class="badge-dot"></span>
+        <span class="badge-text">Disponible pour de nouveaux projets</span>
+    `;
+    document.body.appendChild(badge);
+    
+    // Animation d'entrée après 2 secondes
+    setTimeout(() => {
+        badge.classList.add('show');
+    }, 2000);
+    
+    // Cacher au scroll
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 500) {
+            badge.classList.remove('show');
+        } else {
+            badge.classList.add('show');
+        }
+    });
+}
+
+// Styles pour le badge
+const badgeStyle = document.createElement('style');
+badgeStyle.textContent = `
+    .availability-badge {
+        position: fixed;
+        bottom: 100px;
+        right: 30px;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        padding: 12px 20px;
+        border-radius: 50px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        z-index: 998;
+        transform: translateX(300px);
+        transition: transform 0.5s ease;
+        border: 2px solid rgba(16, 185, 129, 0.3);
+    }
+    
+    .availability-badge.show {
+        transform: translateX(0);
+    }
+    
+    .badge-dot {
+        width: 10px;
+        height: 10px;
+        background: #10b981;
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+        box-shadow: 0 0 10px #10b981;
+    }
+    
+    .badge-text {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #1e293b;
+    }
+    
+    @keyframes pulse {
+        0%, 100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+        50% {
+            transform: scale(1.2);
+            opacity: 0.7;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .availability-badge {
+            bottom: 80px;
+            right: 20px;
+            font-size: 0.85rem;
+            padding: 10px 16px;
+        }
+    }
+`;
+document.head.appendChild(badgeStyle);
+
+// ================================
+// Compteur de visites animé
+// ================================
+function initVisitorCounter() {
+    const visitCount = localStorage.getItem('visitCount') || 0;
+    const newCount = parseInt(visitCount) + 1;
+    localStorage.setItem('visitCount', newCount);
+    
+    // console.log(`Visite n°${newCount} 🎉`);
+}
+
+// ================================
+// Effet de particules sur les boutons au clic
+// ================================
+function initButtonParticles() {
+    const buttons = document.querySelectorAll('.btn');
+    
+    buttons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            for (let i = 0; i < 12; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'click-particle';
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                
+                const angle = (Math.PI * 2 * i) / 12;
+                const velocity = 50 + Math.random() * 50;
+                
+                particle.style.setProperty('--tx', Math.cos(angle) * velocity + 'px');
+                particle.style.setProperty('--ty', Math.sin(angle) * velocity + 'px');
+                
+                this.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 1000);
+            }
+        });
+    });
+}
+
+// Styles pour les particules
+const particleStyle = document.createElement('style');
+particleStyle.textContent = `
+    .click-particle {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 50%;
+        pointer-events: none;
+        animation: particle-burst 1s ease-out forwards;
+    }
+    
+    @keyframes particle-burst {
+        0% {
+            transform: translate(0, 0) scale(1);
+            opacity: 1;
+        }
+        100% {
+            transform: translate(var(--tx), var(--ty)) scale(0);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(particleStyle);
+
+// ================================
+// Effet de confettis lors de l'envoi du formulaire
+// ================================
+function createConfetti() {
+    const colors = ['#8b5cf6', '#ec4899', '#06b6d4', '#10b981'];
+    const confettiCount = 50;
+    
+    for (let i = 0; i < confettiCount; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.animationDelay = Math.random() * 3 + 's';
+        confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        document.body.appendChild(confetti);
+        
+        setTimeout(() => confetti.remove(), 5000);
+    }
+}
+
+// Styles pour les confettis
+const confettiStyle = document.createElement('style');
+confettiStyle.textContent = `
+    .confetti {
+        position: fixed;
+        top: -10px;
+        width: 10px;
+        height: 10px;
+        z-index: 9999;
+        animation: confetti-fall linear forwards;
+        pointer-events: none;
+    }
+    
+    @keyframes confetti-fall {
+        to {
+            transform: translateY(100vh) rotate(360deg);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(confettiStyle);
+
+// ================================
+// Effet de parallaxe au scroll pour le hero
+// ================================
+function initHeroParallax() {
+    const heroContent = document.querySelector('.hero-content');
+    const heroImage = document.querySelector('.hero-image');
+    
+    if (!heroContent || !heroImage) return;
+    
+    window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        const rate = scrolled * 0.5;
+        
+        heroContent.style.transform = `translateY(${rate}px)`;
+        heroImage.style.transform = `translateY(${-rate * 0.3}px)`;
+    });
+}
+
+// ================================
+// Animation des icônes de compétences
+// ================================
+function initSkillIconAnimation() {
+    const skillIcons = document.querySelectorAll('.skill-icon, .service-icon');
+    
+    skillIcons.forEach((icon, index) => {
+        icon.style.animationDelay = `${index * 0.1}s`;
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    icon.style.animation = 'bounceIn 0.6s ease-out';
+                    observer.unobserve(icon);
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        observer.observe(icon);
+    });
+}
+
+// Ajout de l'animation bounceIn
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes bounceIn {
+        0% {
+            opacity: 0;
+            transform: scale(0.3) rotate(-45deg);
+        }
+        50% {
+            opacity: 1;
+            transform: scale(1.1) rotate(5deg);
+        }
+        70% {
+            transform: scale(0.9) rotate(-3deg);
+        }
+        100% {
+            transform: scale(1) rotate(0deg);
+        }
+    }
+`;
+document.head.appendChild(style);
+
+// ================================
+// Effet de survol pour les liens de navigation
+// ================================
+function enhanceNavLinks() {
+    navLinks.forEach(link => {
+        link.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-2px)';
+        });
+        
+        link.addEventListener('mouseleave', function() {
+            if (!this.classList.contains('active')) {
+                this.style.transform = 'translateY(0)';
+            }
+        });
+    });
+}
+
+// ================================
+// Loader de page amélioré
+// ================================
+function initPageLoader() {
+    const loader = document.createElement('div');
+    loader.className = 'page-loader';
+    loader.innerHTML = `
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <p class="loader-text">Chargement de l'expérience...</p>
+        </div>
+    `;
+    document.body.appendChild(loader);
+    
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.remove();
+            }, 500);
+        }, 500);
+    });
+}
+
+// Styles pour le loader
+const loaderStyle = document.createElement('style');
+loaderStyle.textContent = `
+    .page-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 99999;
+        transition: opacity 0.5s ease;
+    }
+    
+    .loader-content {
+        text-align: center;
+    }
+    
+    .loader-spinner {
+        width: 60px;
+        height: 60px;
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 20px;
+    }
+    
+    .loader-text {
+        color: #fff;
+        font-size: 1.2rem;
+        font-weight: 500;
+        animation: pulse 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+`;
+document.head.appendChild(loaderStyle);
+
+// ================================
+// Mise à jour du titre de la page selon la section
+// ================================
+function updatePageTitle() {
+    const originalTitle = document.title;
+    
+    window.addEventListener('scroll', debounce(() => {
+        sections.forEach(section => {
+            const rect = section.getBoundingClientRect();
+            if (rect.top <= 100 && rect.bottom >= 100) {
+                const sectionName = section.getAttribute('id');
+                if (sectionName === 'home') {
+                    document.title = originalTitle;
+                } else {
+                    const sectionTitle = section.querySelector('h2, h1');
+                    if (sectionTitle) {
+                        document.title = `${sectionTitle.textContent} | Portfolio`;
+                    }
+                }
+            }
+        });
+    }, 200));
+}
+
+// ================================
+// Effet de magnétisme sur les boutons
+// ================================
+function initMagneticButtons() {
+    const buttons = document.querySelectorAll('.btn, .filter-btn');
+    
+    buttons.forEach(button => {
+        button.addEventListener('mousemove', (e) => {
+            const rect = button.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            
+            button.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+        });
+        
+        button.addEventListener('mouseleave', () => {
+            button.style.transform = 'translate(0, 0)';
+        });
+    });
+}
+
+// ================================
+// Effet de reveal progressif pour les textes
+// ================================
+function initTextReveal() {
+    const textElements = document.querySelectorAll('.hero-title, .section-title, h3');
+    
+    textElements.forEach(element => {
+        const text = element.textContent.trim();
+        element.textContent = '';
+        element.style.opacity = '1';
+        
+        const words = text.split(' ');
+        words.forEach((word, index) => {
+            const span = document.createElement('span');
+            span.textContent = word;
+            span.style.display = 'inline-block';
+            span.style.opacity = '0';
+            span.style.transform = 'translateY(20px)';
+            span.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
+            span.style.marginRight = '0.25em'; // Ajouter un espace entre les mots
+            element.appendChild(span);
+        });
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const spans = entry.target.querySelectorAll('span');
+                    spans.forEach(span => {
+                        span.style.opacity = '1';
+                        span.style.transform = 'translateY(0)';
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        observer.observe(element);
+    });
+}
+
+// ================================
+// Détection de la vitesse de scroll
+// ================================
+let lastScrollTop = 0;
+let scrollVelocity = 0;
+
+function detectScrollVelocity() {
+    window.addEventListener('scroll', () => {
+        const scrollTop = window.pageYOffset;
+        scrollVelocity = Math.abs(scrollTop - lastScrollTop);
+        lastScrollTop = scrollTop;
+        
+        // Ajuster l'opacité du header selon la vitesse
+        const header = document.querySelector('.header');
+        if (scrollVelocity > 20) {
+            header.style.transform = 'translateY(-100%)';
+        } else {
+            header.style.transform = 'translateY(0)';
+        }
+    });
+}
+
+// ================================
+// Initialisation complète
+// ================================
+if (document.readyState === 'loading') {
+    initPageLoader();
+}
+
+// Ajouter ces initialisations à DOMContentLoaded
+window.addEventListener('DOMContentLoaded', () => {
+    initHeroParallax();
+    initSkillIconAnimation();
+    enhanceNavLinks();
+    updatePageTitle();
+    initMagneticButtons();
+    initTextReveal();
+    detectScrollVelocity();
+    initAvailabilityBadge();
+    initVisitorCounter();
+    initButtonParticles();
+    
+    console.log('🚀 Site ultra-moderne chargé avec succès!');
+});

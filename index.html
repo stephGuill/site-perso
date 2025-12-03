@@ -1,98 +1,157 @@
-<!DOCTYPE html>
-<html lang="fr">
+<!-- 
+    ============================================
+    PORTFOLIO WEBDESIGNER - STRUCTURE HTML
+    ============================================
+    Auteur: StephGraph
+    Description: Site portfolio moderne avec design glassmorphism
+    Technologies: HTML5, CSS3, JavaScript 
+-->
+
+<!DOCTYPE html> <!-- Déclaration du type de document HTML5 -->
+<html lang="fr"> <!-- Balise racine HTML avec langue française pour l'accessibilité -->
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio - WebDesigner Professionnel</title>
+    <!-- META TAGS - Informations sur le document -->
+    <meta charset="UTF-8"> <!-- Encodage des caractères en UTF-8 pour supporter les caractères spéciaux -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Configuration responsive: adapte la largeur à l'écran -->
+    <title>Portfolio - WebDesigner Professionnel</title> <!-- Titre affiché dans l'onglet du navigateur -->
     
-    <!-- Google Fonts -->
+    <!-- GOOGLE FONTS - Police Poppins avec différentes graisses (300 à 700) -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Font Awesome -->
+    <!-- FONT AWESOME - Bibliothèque d'icônes vectorielles (version 6.0.0) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <!-- CSS -->
-    <link rel="stylesheet" href="style.css">
+    <!-- FEUILLE DE STYLES CSS - Styles personnalisés du site -->
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body>
-    <!-- Header & Navigation -->
-    <header class="header">
-        <nav class="navbar">
-            <div class="nav-container">
-                <a href="#" class="nav-logo">
-                    <i class="fas fa-palette"></i>
-                    WebDesigner
+<body> <!-- Corps du document - Contient tout le contenu visible -->
+    <!-- 
+        ============================================
+        HEADER & NAVIGATION
+        ============================================
+        - Position fixe en haut de page (fixed)
+        - Effet glassmorphism (fond flou transparent)
+        - Navigation responsive avec menu burger
+        - Active link selon la section visible
+    -->
+    <header class="header"> <!-- En-tête fixe du site -->
+        <nav class="navbar"> <!-- Barre de navigation principale -->
+            <div class="nav-container"> <!-- Container pour centrer et limiter la largeur -->
+                
+                <!-- LOGO - Lien vers le haut de page -->
+                <a href="#" class="nav-logo"> <!-- Lien cliquable du logo -->
+                    <i class="fas fa-palette"></i> <!-- Icône palette (Font Awesome) -->
+                    WebDesigner <!-- Texte du logo -->
                 </a>
                 
-                <ul class="nav-menu">
-                    <li class="nav-item">
-                        <a href="#home" class="nav-link active">Accueil</a>
+                <!-- MENU DESKTOP - Liste des liens de navigation -->
+                <ul class="nav-menu"> <!-- Liste non ordonnée pour le menu -->
+                    <li class="nav-item"> <!-- Item de liste -->
+                        <a href="#home" class="nav-link active">Accueil</a> <!-- Lien ancre vers section #home, classe 'active' par défaut -->
                     </li>
                     <li class="nav-item">
-                        <a href="#about" class="nav-link">À propos</a>
+                        <a href="#about" class="nav-link">À propos</a> <!-- Lien vers section #about -->
                     </li>
                     <li class="nav-item">
-                        <a href="#services" class="nav-link">Services</a>
+                        <a href="#services" class="nav-link">Services</a> <!-- Lien vers section #services -->
                     </li>
                     <li class="nav-item">
-                        <a href="#portfolio" class="nav-link">Portfolio</a>
+                        <a href="#portfolio" class="nav-link">Portfolio</a> <!-- Lien vers section #portfolio -->
                     </li>
                     <li class="nav-item">
-                        <a href="#contact" class="nav-link">Contact</a>
+                        <a href="#contact" class="nav-link">Contact</a> <!-- Lien vers section #contact -->
                     </li>
                 </ul>
                 
-                <div class="nav-toggle">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
+                <!-- MENU BURGER - Visible uniquement sur mobile/tablette -->
+                <div class="nav-toggle"> <!-- Container du bouton burger (3 barres) -->
+                    <span class="bar"></span> <!-- Première barre du burger -->
+                    <span class="bar"></span> <!-- Deuxième barre du burger -->
+                    <span class="bar"></span> <!-- Troisième barre du burger -->
                 </div>
             </div>
         </nav>
     </header>
 
-    <!-- Section Hero -->
-     <section id="home" class="hero">
-        <div class="hero-container">
+    <!-- 
+        ============================================
+        SECTION HERO (Page d'accueil principale)
+        ============================================
+        - Première section visible (100vh de hauteur)
+        - Layout en 2 colonnes: contenu texte + image
+        - Fond avec dégradé animé
+        - Particules animées en arrière-plan (JS)
+        - Icônes flottantes autour de l'image
+    -->
+    <section id="home" class="hero"> <!-- Section principale avec ID pour ancrage -->
+        <div class="hero-container"> <!-- Container grid 2 colonnes -->
+            
+            <!-- COLONNE GAUCHE - Contenu textuel -->
             <div class="hero-content">
+                <!-- Titre principal H1 avec animation fadeInUp -->
                 <h1 class="hero-title">
-                    Salut, je suis <span class="highlight">StephGraph</span>
+                    Salut, je suis <span class="highlight">StephGraph</span> <!-- Span avec effet dégradé animé -->
                 </h1>
+                
+                <!-- Sous-titre H2 avec effet typing (machine à écrire) -->
                 <h2 class="hero-subtitle">WebDesigner & Développeur Frontend & Backend</h2>
+                
+                <!-- Description/Présentation -->
                 <p class="hero-description">
-                    Je crée des expériences web uniques et captivantes qui allient créativité,
+                    Je crée des expériences web uniques et captivantes qui allient créativité, 
                     fonctionnalité et performance. Spécialisée dans le design responsive et 
                     l'interface utilisateur moderne.
                 </p>
+                
+                <!-- Boutons d'action CTA (Call To Action) -->
                 <div class="hero-buttons">
-                    <a href="#portfolio" class="btn btn-primary">Voir mes projets</a>
-                    <a href="#contact" class="btn btn-secondary">Me contacter</a>
+                    <a href="#portfolio" class="btn btn-primary">Voir mes projets</a> <!-- Bouton principal avec dégradé -->
+                    <a href="#contact" class="btn btn-secondary">Me contacter</a> <!-- Bouton secondaire transparent -->
                 </div>
             </div>
+            
+            <!-- COLONNE DROITE - Image de profil avec effets -->
             <div class="hero-image">
-                <div class="image-container">
+                <div class="image-container"> <!-- Container pour positionnement des icônes -->
+                    
+                    <!-- Image de profil circulaire avec bordure et ombre -->
                     <img src="images/slide07.png" alt="StephGraph - WebDesigner & Développeur" class="profile-img">
-                    <div class="floating-elements">
-                        <div class="floating-icon icon-1"><i class="fab fa-html5"></i></div>
-                        <div class="floating-icon icon-2"><i class="fab fa-css3-alt"></i></div>
-                        <div class="floating-icon icon-3"><i class="fab fa-js-square"></i></div>
-                        <div class="floating-icon icon-4"><i class="fab fa-figma"></i></div> 
+                    
+                    <!-- Icônes flottantes positionnées autour de l'image -->
+                    <div class="floating-elements"> <!-- Container absolu pour les icônes -->
+                        <div class="floating-icon icon-1"><i class="fab fa-html5"></i></div> <!-- HTML5 - Position: haut droite -->
+                        <div class="floating-icon icon-2"><i class="fab fa-css3-alt"></i></div> <!-- CSS3 - Position: haut gauche -->
+                        <div class="floating-icon icon-3"><i class="fab fa-js-square"></i></div> <!-- JavaScript - Position: bas droite -->
+                        <div class="floating-icon icon-4"><i class="fab fa-figma"></i></div> <!-- Figma - Position: bas gauche -->
                     </div>
                 </div>
             </div>
         </div>
-     </section>
+    </section>
 
-     <!-- Section A propos -->
-      <section id="about" class="about">
-        <div class="container">
+    <!-- 
+        ============================================
+        SECTION À PROPOS
+        ============================================
+        - Présentation du parcours professionnel
+        - Grille de compétences avec icônes
+        - Statistiques animées (compteurs)
+        - Fond avec effet radial gradient
+    -->
+    <section id="about" class="about"> <!-- Section avec fond gris clair -->
+        <div class="container"> <!-- Container centré avec largeur max -->
+            
+            <!-- EN-TÊTE DE SECTION - Répété dans toutes les sections -->
             <div class="section-header">
-                <h2 class="section-title">À propos de moi</h2>
-                <p class="section-subtitle">Découvrez mon parcours et mes compétences</p>
+                <h2 class="section-title">À propos de moi</h2> <!-- Titre avec soulignement animé -->
+                <p class="section-subtitle">Découvrez mon parcours et mes compétences</p> <!-- Sous-titre descriptif -->
             </div>
+            
+            <!-- CONTENU EN GRID - 2 colonnes: texte + stats -->
             <div class="about-content">
+                <!-- COLONNE 1 - Texte de présentation et compétences -->
                 <div class="about-text">
-                    <h3>Passionnée par le design web depuis 2018</h3>
+                    <h3>Passionnée par le design web depuis 2018</h3> <!-- Sous-titre avec animation reveal -->
                     <p>
                         Diplômée en design graphique et autodidacte en développement web, 
                         je combine créativité artistique et expertise technique pour créer 
@@ -103,24 +162,24 @@
                         l'accessibilité et les performances, tout en maintenant 
                         un design esthétique et moderne.
                     </p>
-
-                    <div class="skills_grid">
+                    
+                    <div class="skills-grid">
                         <div class="skill-item">
                             <div class="skill-icon">
-                                <i class="fas fa-paint-brunsh"></i>
+                                <i class="fas fa-paint-brush"></i>
                             </div>
                             <h4>Design UI/UX</h4>
                             <p>Création d'interfaces intuitives et attrayantes</p>
                         </div>
-
-                         <div class="skill-item">
+                        
+                        <div class="skill-item">
                             <div class="skill-icon">
                                 <i class="fas fa-code"></i>
                             </div>
                             <h4>Développement Frontend</h4>
                             <p>HTML5, CSS3, JavaScript, React</p>
                         </div>
-
+                        
                         <div class="skill-item">
                             <div class="skill-icon">
                                 <i class="fas fa-mobile-alt"></i>
@@ -128,7 +187,7 @@
                             <h4>Design Responsive</h4>
                             <p>Optimisation pour tous les appareils</p>
                         </div>
-
+                        
                         <div class="skill-item">
                             <div class="skill-icon">
                                 <i class="fas fa-rocket"></i>
@@ -138,7 +197,7 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <div class="about-stats">
                     <div class="stat-item">
                         <span class="stat-number" data-count="50">0</span>
@@ -162,13 +221,13 @@
     </section>
 
     <!-- Section Services -->
-     <section id="services" class="services">
+    <section id="services" class="services">
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Mes Services</h2>
                 <p class="section-subtitle">Des solutions complètes pour votre présence web</p>
             </div>
-
+            
             <div class="services-grid">
                 <div class="service-card">
                     <div class="service-icon">
@@ -185,7 +244,7 @@
                         <li><i class="fas fa-check"></i> Performance optimisée</li>
                     </ul>
                 </div>
-
+                
                 <div class="service-card">
                     <div class="service-icon">
                         <i class="fas fa-palette"></i>
@@ -201,7 +260,7 @@
                         <li><i class="fas fa-check"></i> Tests utilisateur</li>
                     </ul>
                 </div>
-
+                
                 <div class="service-card">
                     <div class="service-icon">
                         <i class="fas fa-shopping-cart"></i>
@@ -270,22 +329,22 @@
     </section>
 
     <!-- Section Portfolio -->
-     <section id="portfolio" class="portfolio">
+    <section id="portfolio" class="portfolio">
         <div class="container">
             <div class="section-header">
-                <h2 class="section_title">Mon Portfolio</h2>
+                <h2 class="section-title">Mon Portfolio</h2>
                 <p class="section-subtitle">Découvrez quelques-uns de mes projets récents</p>
             </div>
-
+            
             <div class="portfolio-filters">
                 <button class="filter-btn active" data-filter="all">Tous</button>
                 <button class="filter-btn" data-filter="web">Sites Web</button>
                 <button class="filter-btn" data-filter="app">Applications</button>
                 <button class="filter-btn" data-filter="ecommerce">E-commerce</button>
                 <button class="filter-btn" data-filter="design">Design</button>
-        </div>
-
-        <div class="portfolio-grid">
+            </div>
+            
+            <div class="portfolio-grid">
                 <div class="portfolio-item" data-category="web">
                     <div class="portfolio-image">
                         <img src="images/Capture d’écran projet 01.png" alt="Salle de sport Fight Club">
@@ -305,7 +364,7 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <div class="portfolio-item" data-category="app">
                     <div class="portfolio-image">
                         <img src="images/Capture décran projet 05.png" alt="Application messagerie">
@@ -409,7 +468,7 @@
         </div>
     </section>
 
-     <!-- Section Contact -->
+    <!-- Section Contact -->
     <section id="contact" class="contact">
         <div class="container">
             <div class="section-header">
@@ -552,10 +611,4 @@
     <!-- JavaScript -->
     <script src="script.js"></script>
 </body>
-</html>   
-
-
-
-
-
-        
+</html>
