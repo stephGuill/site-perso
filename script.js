@@ -444,8 +444,8 @@ const projectData = {
         title: "Salle de combat mixte Fight Club", 
         description: "Site web responsive pour une salle de sport de combat mixte avec système de réservation en ligne, menu interactif et galerie photos. Le design met l'accent sur la mixité dans les sports de combat.",
         image: "images/Capture d’écran projet 01.png",
-        technologies: ["HTML5", "CSS3","JavaScript"],
-        liveLink: "https://stephane-guillamo.students-laplateforme.io/Salle_de_sport_%20Fight%20Club/index.html",
+        technologies: ["HTML5", "CSS3"],
+        liveLink: "https://stephane-guillamo.students-laplateforme.io/salle_de_sport_fight_club/index.html",
         codeLink: "#"
     },
     2: {
@@ -468,7 +468,7 @@ const projectData = {
         title: "Agence de voyage",
         description: "Site vitrine élégant pour une agence de voyage avec galerie de photos souvenirs de voyageurs, présentation des services et formulaire de contact avancé.",
         image: "images/Capture d’écran projet 03.png",
-        technologies: ["HTML5", "SCSS", "JavaScript", "GSAP", "WordPress"],
+        technologies: ["HTML5", "SCSS"],
         liveLink: "https://stephane-guillamo.students-laplateforme.io/voyage/index.html",
         codeLink: "#"
     },
@@ -491,29 +491,64 @@ const projectData = {
 };
 
 function initModal() {
-    const portfolioLinks = document.querySelectorAll('.portfolio-link[data-project]');
+    console.log('🔧 Initialisation de la modal...');
     
-    portfolioLinks.forEach(link => {
+    // Vérifier que la modal existe
+    if (!modal) {
+        console.error('❌ Modal introuvable!');
+        return;
+    }
+    console.log('✅ Modal trouvée:', modal);
+    
+    const portfolioLinks = document.querySelectorAll('.portfolio-link[data-project]');
+    console.log('🔗 Nombre de liens portfolio trouvés:', portfolioLinks.length);
+    
+    if (portfolioLinks.length === 0) {
+        console.warn('⚠️ Aucun lien portfolio trouvé avec data-project');
+        return;
+    }
+    
+    portfolioLinks.forEach((link, index) => {
+        console.log(`📌 Lien ${index + 1}:`, link, 'data-project:', link.getAttribute('data-project'));
+        
         link.addEventListener('click', (e) => {
+            console.log('🖱️ CLIC DÉTECTÉ!', e.target, e.currentTarget);
             e.preventDefault();
-            const projectId = link.getAttribute('data-project');
+            
+            let target = e.target;
+            let projectLink = target.closest('.portfolio-link[data-project]');
+            
+            if (!projectLink) {
+                console.warn('⚠️ Lien portfolio non trouvé');
+                return;
+            }
+            
+            const projectId = projectLink.getAttribute('data-project');
             const project = projectData[projectId];
+            
+            console.log('✨ Clic sur projet:', projectId, 'depuis élément:', target.tagName);
             
             if (project) {
                 openModal(project);
+            } else {
+                console.error('❌ Projet non trouvé:', projectId);
             }
         });
     });
 
-    // Fermer la modal
-    modalClose.addEventListener('click', closeModal);
+    // Fermer la modal avec le bouton X
+    if (modalClose) {
+        modalClose.addEventListener('click', closeModal);
+    }
+    
+    // Fermer la modal en cliquant sur le fond
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
             closeModal();
         }
     });
 
-    // Fermer avec Escape
+    // Fermer avec la touche Escape
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && modal.style.display === 'block') {
             closeModal();
@@ -522,14 +557,32 @@ function initModal() {
 }
 
 function openModal(project) {
-    document.getElementById('modalImage').src = project.image;
-    document.getElementById('modalTitle').textContent = project.title;
-    document.getElementById('modalDescription').textContent = project.description;
-    document.getElementById('modalLiveLink').href = project.liveLink;
-    document.getElementById('modalCodeLink').href = project.codeLink;
+    console.log('Ouverture modal pour:', project.title); // Debug
     
-    // Technologies
+    // Récupère les éléments de la modal
+    const modalImage = document.getElementById('modalImage');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDescription = document.getElementById('modalDescription');
+    const modalLiveLink = document.getElementById('modalLiveLink');
+    const modalCodeLink = document.getElementById('modalCodeLink');
     const techContainer = document.getElementById('modalTech');
+    
+    // Vérifie que tous les éléments existent
+    if (!modalImage || !modalTitle || !modalDescription || !techContainer) {
+        console.error('Éléments de la modal manquants!');
+        return;
+    }
+    
+    // Remplit la modal avec les données du projet
+    modalImage.src = project.image;
+    modalImage.alt = project.title;
+    modalTitle.textContent = project.title;
+    modalDescription.textContent = project.description;
+    
+    if (modalLiveLink) modalLiveLink.href = project.liveLink;
+    if (modalCodeLink) modalCodeLink.href = project.codeLink;
+    
+    // Ajoute les technologies
     techContainer.innerHTML = '';
     project.technologies.forEach(tech => {
         const tag = document.createElement('span');
@@ -538,16 +591,20 @@ function openModal(project) {
         techContainer.appendChild(tag);
     });
     
+    // Affiche la modal
     modal.style.display = 'block';
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden'; // Bloque le scroll de la page
+    
+    console.log('Modal ouverte!'); // Debug
 }
 
 function closeModal() {
+    console.log('Fermeture modal'); // Debug
     modal.style.display = 'none';
-    document.body.style.overflow = 'auto';
+    document.body.style.overflow = 'auto'; // Réactive le scroll de la page
 }
 
-initModal();
+// initModal(); sera appelé dans DOMContentLoaded
 
 // ================================
 // Formulaire de contact
@@ -801,6 +858,20 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Mettre à jour la navigation initiale
     updateNavigation();
+    
+    // Initialiser la modal du portfolio
+    initModal();
+    
+    // DEBUG: Capturer TOUS les clics sur la page
+    document.addEventListener('click', (e) => {
+        console.log('🌍 CLIC GLOBAL détecté sur:', e.target, 'Classes:', e.target.className);
+        if (e.target.closest('.portfolio-link')) {
+            console.log('👉 Le clic est sur un portfolio-link!');
+        }
+        if (e.target.closest('.portfolio-overlay')) {
+            console.log('👉 Le clic est dans portfolio-overlay!');
+        }
+    }, true);
     
     // Initialiser les nouveaux effets modernes
     initCustomCursor();
