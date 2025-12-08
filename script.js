@@ -97,348 +97,514 @@ function initCustomCursor() {
 }
 
 // ================================
-// Effet de particules dans le hero
+// SYSTÈME DE PARTICULES FLOTTANTES
 // ================================
+// Crée 30 particules animées dans la section hero pour effet visuel dynamique
+// Les particules flottent avec des vitesses et positions aléatoires
 function initParticles() {
-    const hero = document.querySelector('.hero');
-    if (!hero) return;
+    // 1. SÉLECTION DE LA SECTION HERO
+    const hero = document.querySelector('.hero'); // Sélectionne la section d'accueil
+    if (!hero) return; // Si hero n'existe pas, sortir de la fonction (sécurité)
 
-    const particlesContainer = document.createElement('div');
-    particlesContainer.className = 'particles';
-    hero.appendChild(particlesContainer);
+    // 2. CRÉATION DU CONTENEUR DE PARTICULES
+    const particlesContainer = document.createElement('div'); // Crée une div pour contenir toutes les particules
+    particlesContainer.className = 'particles'; // Ajoute classe CSS pour le style
+    hero.appendChild(particlesContainer); // Ajoute le conteneur dans la section hero
 
-    for (let i = 0; i < 30; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.left = Math.random() * 100 + '%';
+    // 3. GÉNÉRATION DE 30 PARTICULES
+    for (let i = 0; i < 30; i++) { // Boucle de 0 à 29 (30 itérations)
+        const particle = document.createElement('div'); // Crée une div pour chaque particule
+        particle.className = 'particle'; // Ajoute classe CSS (définit taille, forme, couleur)
+        
+        // Position horizontale aléatoire de 0% à 100% de la largeur
+        particle.style.left = Math.random() * 100 + '%'; // Math.random() génère 0.0 à 0.99999...
+        
+        // Délai d'animation aléatoire de 0s à 15s (pour décalage du démarrage)
         particle.style.animationDelay = Math.random() * 15 + 's';
+        
+        // Durée d'animation aléatoire de 15s à 25s (vitesse de montée variable)
         particle.style.animationDuration = (15 + Math.random() * 10) + 's';
-        particlesContainer.appendChild(particle);
+        
+        particlesContainer.appendChild(particle); // Ajoute la particule au conteneur
     }
 }
 
 // ================================
-// Effet de saisie animée (typing effect)
+// EFFET MACHINE À ÉCRIRE (Typing Effect)
 // ================================
+// Simule une saisie lettre par lettre du sous-titre avec curseur clignotant
+// Comme un terminal ou une machine à écrire vintage
 function initTypingEffect() {
-    const subtitle = document.querySelector('.hero-subtitle');
-    if (!subtitle) return;
+    // 1. SÉLECTION DE L'ÉLÉMENT À ANIMER
+    const subtitle = document.querySelector('.hero-subtitle'); // Le sous-titre du hero
+    if (!subtitle) return; // Protection: sortir si l'élément n'existe pas
 
-    const text = subtitle.textContent;
-    subtitle.textContent = '';
-    subtitle.style.borderRight = '2px solid rgba(255,255,255,0.7)';
+    // 2. SAUVEGARDE ET VIDAGE DU TEXTE ORIGINAL
+    const text = subtitle.textContent; // Sauvegarde le texte complet (ex: "WebDesigner & Développeur...")
+    subtitle.textContent = ''; // Vide le texte pour commencer l'animation
     
-    let charIndex = 0;
+    // 3. AJOUT DU CURSEUR CLIGNOTANT
+    subtitle.style.borderRight = '2px solid rgba(255,255,255,0.7)'; // Bordure droite = curseur
     
+    // 4. INDEX DE CARACTÈRE (position actuelle dans le texte)
+    let charIndex = 0; // Commence au premier caractère (index 0)
+    
+    // 5. FONCTION RÉCURSIVE POUR TAPER CHAQUE LETTRE
     function type() {
-        if (charIndex < text.length) {
-            subtitle.textContent += text.charAt(charIndex);
-            charIndex++;
-            setTimeout(type, 100);
-        } else {
+        if (charIndex < text.length) { // Si on n'a pas atteint la fin du texte
+            // Ajoute le caractère actuel au texte affiché
+            subtitle.textContent += text.charAt(charIndex); // charAt(0) = 'W', charAt(1) = 'e', etc.
+            charIndex++; // Passe au caractère suivant
+            setTimeout(type, 100); // Rappelle type() après 100ms (vitesse de frappe)
+        } else { // Fin du texte atteinte
+            // Cache le curseur après 500ms
             setTimeout(() => {
-                subtitle.style.borderRight = 'none';
+                subtitle.style.borderRight = 'none'; // Retire la bordure/curseur
             }, 500);
         }
     }
     
-    setTimeout(type, 1000);
+    // 6. DÉMARRAGE DE L'ANIMATION APRÈS 1 SECONDE
+    setTimeout(type, 1000); // Attend 1s avant de commencer à taper
 }
 
 // ================================
-// Effet de ripple sur les boutons
+// EFFET RIPPLE (Ondulation au clic)
 // ================================
+// Crée une ondulation circulaire au point de clic sur les boutons
+// Effet similaire au Material Design (Google)
 function initRippleEffect() {
+    // 1. SÉLECTION DE TOUS LES BOUTONS
     const buttons = document.querySelectorAll('.btn, .filter-btn, .portfolio-link');
     
+    // 2. AJOUT DE L'ÉVÉNEMENT CLIC SUR CHAQUE BOUTON
     buttons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            const ripple = document.createElement('span');
-            ripple.className = 'ripple-effect';
+        button.addEventListener('click', function(e) { // 'this' = bouton cliqué
+            // 3. CRÉATION DE L'ÉLÉMENT RIPPLE
+            const ripple = document.createElement('span'); // Crée un span pour l'ondulation
+            ripple.className = 'ripple-effect'; // Classe CSS avec animation d'expansion
             
-            const rect = this.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            const x = e.clientX - rect.left - size / 2;
-            const y = e.clientY - rect.top - size / 2;
+            // 4. CALCUL DE LA POSITION ET TAILLE
+            const rect = this.getBoundingClientRect(); // Position et dimensions du bouton
+            const size = Math.max(rect.width, rect.height); // Prend la plus grande dimension
             
-            ripple.style.width = ripple.style.height = size + 'px';
-            ripple.style.left = x + 'px';
-            ripple.style.top = y + 'px';
+            // Coordonnées du clic par rapport au bouton
+            const x = e.clientX - rect.left - size / 2; // Centrage horizontal du ripple
+            const y = e.clientY - rect.top - size / 2; // Centrage vertical du ripple
             
-            this.appendChild(ripple);
+            // 5. APPLICATION DU STYLE AU RIPPLE
+            ripple.style.width = ripple.style.height = size + 'px'; // Cercle carré (même largeur/hauteur)
+            ripple.style.left = x + 'px'; // Position X du centre
+            ripple.style.top = y + 'px'; // Position Y du centre
             
+            // 6. AJOUT DU RIPPLE AU BOUTON
+            this.appendChild(ripple); // Insère le span dans le bouton
+            
+            // 7. SUPPRESSION APRÈS ANIMATION (600ms)
             setTimeout(() => {
-                ripple.remove();
-            }, 600);
+                ripple.remove(); // Retire l'élément du DOM pour éviter accumulation
+            }, 600); // Durée = durée de l'animation CSS
         });
     });
 }
 
 // ================================
-// Effet de tilt 3D sur les cartes
+// EFFET TILT 3D AU SURVOL
 // ================================
+// Fait basculer les cartes en 3D selon la position de la souris
+// Crée un effet de profondeur et d'interactivité
 function initTiltEffect() {
+    // 1. SÉLECTION DE TOUTES LES CARTES
     const cards = document.querySelectorAll('.service-card, .skill-item, .portfolio-item');
     
+    // 2. AJOUT DES ÉVÉNEMENTS SUR CHAQUE CARTE
     cards.forEach(card => {
+        // ÉVÉNEMENT: Mouvement de la souris sur la carte
         card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+            // 3. RÉCUPÉRATION DES DIMENSIONS ET POSITION DE LA CARTE
+            const rect = card.getBoundingClientRect(); // Position et taille de la carte
+            const x = e.clientX - rect.left; // Position X de la souris dans la carte (0 à rect.width)
+            const y = e.clientY - rect.top; // Position Y de la souris dans la carte (0 à rect.height)
             
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
+            // 4. CALCUL DU CENTRE DE LA CARTE
+            const centerX = rect.width / 2; // Milieu horizontal
+            const centerY = rect.height / 2; // Milieu vertical
             
-            const rotateX = (y - centerY) / 10;
+            // 5. CALCUL DES ROTATIONS
+            // Si souris en haut (y petit), rotateX négatif = carte penche vers avant
+            // Si souris en bas (y grand), rotateX positif = carte penche vers arrière
+            const rotateX = (y - centerY) / 10; // Division par 10 = limite l'angle de rotation
+            
+            // Si souris à gauche (x petit), rotateY positif = carte tourne à droite
+            // Si souris à droite (x grand), rotateY négatif = carte tourne à gauche
             const rotateY = (centerX - x) / 10;
             
+            // 6. APPLICATION DE LA TRANSFORMATION 3D
+            // perspective(1000px) = profondeur de la scène 3D
+            // rotateX/Y = rotation en degrés
+            // scale3d(1.05) = agrandissement léger de 5%
             card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
         });
         
+        // ÉVÉNEMENT: Souris quitte la carte
         card.addEventListener('mouseleave', () => {
+            // 7. RÉINITIALISATION DE LA POSITION (retour à plat)
             card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
         });
     });
 }
 
 // ================================
-// Progress bar de scroll
+// BARRE DE PROGRESSION DE SCROLL
 // ================================
+// Affiche une barre colorée en haut de page indiquant le % de scroll
+// Se remplit de gauche à droite au fur et à mesure du scroll
 function initScrollProgress() {
-    const progressBar = document.createElement('div');
-    progressBar.className = 'scroll-progress';
-    progressBar.innerHTML = '<div class="scroll-progress-bar"></div>';
-    document.body.appendChild(progressBar);
+    // 1. CRÉATION DE LA BARRE DE PROGRESSION
+    const progressBar = document.createElement('div'); // Conteneur fixe en haut de page
+    progressBar.className = 'scroll-progress'; // Classe CSS (position: fixed, top: 0)
+    progressBar.innerHTML = '<div class="scroll-progress-bar"></div>'; // Barre intérieure qui s'étend
+    document.body.appendChild(progressBar); // Ajout au body
     
+    // 2. SÉLECTION DE LA BARRE DE REMPLISSAGE
     const progressBarFill = progressBar.querySelector('.scroll-progress-bar');
     
+    // 3. ÉVÉNEMENT DE SCROLL
     window.addEventListener('scroll', () => {
-        const scrollTop = window.pageYOffset;
+        // 4. CALCUL DE LA POSITION DE SCROLL
+        const scrollTop = window.pageYOffset; // Nombre de pixels scrollés depuis le haut (0 au départ)
+        
+        // 5. CALCUL DE LA HAUTEUR TOTALE SCROLLABLE
+        // scrollHeight = hauteur totale du document
+        // innerHeight = hauteur de la fenêtre visible
         const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        
+        // 6. CALCUL DU POURCENTAGE DE SCROLL
+        // scrollPercent = 0% en haut, 100% en bas
         const scrollPercent = (scrollTop / docHeight) * 100;
         
-        progressBarFill.style.width = scrollPercent + '%';
+        // 7. MISE À JOUR DE LA LARGEUR DE LA BARRE
+        progressBarFill.style.width = scrollPercent + '%'; // Applique la largeur en %
     });
 }
 
 // ================================
-// Compteur de statistiques amélioré
+// ANIMATION PULSE SUR LES COMPTEURS
 // ================================
+// Fait "rebondir" les chiffres des statistiques quand ils deviennent visibles
+// Utilise l'Intersection Observer API pour détecter l'entrée dans le viewport
 function enhancedCounters() {
+    // 1. PARCOURS DE TOUS LES COMPTEURS
     statNumbers.forEach(counter => {
-        counter.style.transition = 'transform 0.3s ease';
+        // 2. AJOUT DE LA TRANSITION CSS
+        counter.style.transition = 'transform 0.3s ease'; // Transition fluide pour l'échelle
         
+        // 3. CRÉATION D'UN OBSERVATEUR D'INTERSECTION
+        // Détecte quand l'élément entre/sort de la zone visible
         const observer = new IntersectionObserver((entries) => {
+            // 4. PARCOURS DES ENTRÉES OBSERVÉES
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    counter.style.transform = 'scale(1.2)';
+                // 5. VÉRIFICATION SI L'ÉLÉMENT EST VISIBLE
+                if (entry.isIntersecting) { // true = élément visible dans viewport
+                    // 6. AGRANDISSEMENT (effet pulse)
+                    counter.style.transform = 'scale(1.2)'; // Agrandi à 120%
+                    
+                    // 7. RETOUR À LA TAILLE NORMALE APRÈS 300ms
                     setTimeout(() => {
-                        counter.style.transform = 'scale(1)';
+                        counter.style.transform = 'scale(1)'; // Retour à 100%
                     }, 300);
                 }
             });
-        }, { threshold: 0.5 });
+        }, { 
+            threshold: 0.5 // Options: déclenche quand 50% de l'élément est visible
+        });
         
-        observer.observe(counter);
+        // 8. DÉMARRAGE DE L'OBSERVATION
+        observer.observe(counter); // Commence à surveiller cet élément
     });
 }
 
 // ================================
 // NAVIGATION MOBILE (Menu Burger)
 // ================================
-// Gère l'ouverture/fermeture du menu sur mobile et tablette
-// Le menu burger (3 barres) est visible uniquement en mode responsive
+// Gère l'ouverture/fermeture du menu hamburger sur écrans < 768px
+// Transforme les 3 barres en X quand le menu est ouvert
 
-// FONCTION: Basculer l'état du menu (ouvert/fermé)
+// FONCTION: Basculer l'état du menu (ouvert ↔ fermé)
 function toggleMobileMenu() {
-    // toggle() = ajoute la classe si absente, retire si présente
-    navMenu.classList.toggle('active'); // Active/désactive le menu (slide depuis la droite)
-    navToggle.classList.toggle('active'); // Transforme le burger en X
+    // classList.toggle() = ajoute la classe si absente, la retire si présente
+    navMenu.classList.toggle('active'); // Active/désactive le menu (slide depuis le haut avec animation)
+    navToggle.classList.toggle('active'); // Transforme le burger (☰) en croix (×)
+    // CSS: .active anime les 3 barres:
+    // - barre du milieu: opacity 0 (disparaît)
+    // - barre du haut: rotate(45deg) + translateY
+    // - barre du bas: rotate(-45deg) + translateY
 }
 
-// EVENT LISTENER 1: Click sur le bouton burger
-navToggle.addEventListener('click', toggleMobileMenu);
+// ÉCOUTEUR D'ÉVÉNEMENT 1: Clic sur le bouton burger
+navToggle.addEventListener('click', toggleMobileMenu); // Ouvre/ferme au clic
 
-// EVENT LISTENER 2: Click sur un lien du menu
-// forEach = boucle sur tous les liens du menu
-navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        // Quand on clique un lien, on ferme le menu
-        navMenu.classList.remove('active'); // Retire classe active du menu
-        navToggle.classList.remove('active'); // Remet le burger normal
+// ÉCOUTEUR D'ÉVÉNEMENT 2: Clic sur un lien du menu
+// But: Fermer automatiquement le menu après sélection d'une section
+navLinks.forEach(link => { // Parcourt tous les liens du menu
+    link.addEventListener('click', () => { // Quand on clique sur un lien
+        navMenu.classList.remove('active'); // Ferme le menu (retire classe active)
+        navToggle.classList.remove('active'); // Remet le burger en forme normale (☰)
+        // L'ancre (#about, #services, etc.) fait défiler automatiquement vers la section
     });
 });
 
 // ================================
-// NAVIGATION STICKY & ACTIVE LINKS (Scroll Spy)
+// NAVIGATION STICKY & SCROLL SPY
 // ================================
-// Deux fonctionnalités combinées:
-// 1. Navbar sticky: change de style au scroll (fond plus opaque)
-// 2. Active link: met en surbrillance le lien correspondant à la section visible
+// Deux fonctionnalités essentielles de navigation:
+// 1. STICKY NAVBAR: La navbar change d'apparence après un certain scroll
+// 2. SCROLL SPY: Le lien actif change selon la section visible à l'écran
 
 function updateNavigation() {
     // ─────────────────────────────────
-    // 1. NAVBAR STICKY
+    // PARTIE 1: NAVBAR STICKY
     // ─────────────────────────────────
-    // window.scrollY = nombre de pixels scrollés depuis le haut
-    if (window.scrollY > 100) { // Si on a scrollé plus de 100px
-        navbar.classList.add('scrolled'); // Ajoute classe 'scrolled' (fond plus foncé, ombre plus forte)
-    } else {
-        navbar.classList.remove('scrolled'); // Retire classe si on remonte en haut
+    // Objectif: Rendre la navbar plus visible après avoir scrollé
+    
+    // window.scrollY = nombre de pixels scrollés verticalement depuis le haut de page
+    if (window.scrollY > 100) { // Si l'utilisateur a scrollé plus de 100 pixels
+        navbar.classList.add('scrolled'); // Ajoute classe CSS 'scrolled'
+        // Effet CSS: background plus opaque, box-shadow plus prononcée
+    } else { // Si on est en haut de page (scrollY ≤ 100px)
+        navbar.classList.remove('scrolled'); // Retire la classe pour style transparent
     }
 
     // ─────────────────────────────────
-    // 2. ACTIVE LINK (Scroll Spy)
+    // PARTIE 2: SCROLL SPY (Active Link)
     // ─────────────────────────────────
-    // Détermine quelle section est actuellement visible
-    let current = ''; // Variable pour stocker l'ID de la section courante
+    // Objectif: Mettre en surbrillance le lien du menu correspondant à la section visible
     
-    // Boucle sur toutes les sections du site
+    let current = ''; // Variable pour stocker l'ID de la section actuellement visible
+    
+    // Parcourt toutes les sections (<section>) du site
     sections.forEach(section => {
-        const sectionTop = section.offsetTop; // Position top de la section par rapport au document
-        const sectionHeight = section.clientHeight; // Hauteur de la section en pixels
+        // offsetTop = distance entre le haut de la section et le haut du document
+        const sectionTop = section.offsetTop; 
         
-        // Si on a scrollé jusqu'à cette section (avec marge de 200px)
+        // clientHeight = hauteur de la section en pixels
+        const sectionHeight = section.clientHeight; 
+        
+        // Vérifie si on a scrollé assez pour atteindre cette section
+        // Marge de 200px pour anticiper (active le lien avant d'atteindre complètement la section)
         if (window.scrollY >= sectionTop - 200) {
-            current = section.getAttribute('id'); // Récupère l'ID (ex: "about", "services")
+            // getAttribute('id') récupère l'ID de la section (ex: "home", "about", "services")
+            current = section.getAttribute('id');
         }
     });
 
-    // Met à jour les classes 'active' sur les liens
+    // Met à jour les classes 'active' sur les liens de navigation
     navLinks.forEach(link => {
-        link.classList.remove('active'); // Retire 'active' de tous les liens
-        // Si le href du lien correspond à l'ID de la section courante
+        link.classList.remove('active'); // D'abord, retire 'active' de TOUS les liens
+        
+        // Vérifie si le href de ce lien correspond à la section courante
+        // Exemple: si current = "about", cherche le lien avec href="#about"
         if (link.getAttribute('href') === `#${current}`) {
-            link.classList.add('active'); // Ajoute 'active' au lien correspondant
+            link.classList.add('active'); // Ajoute 'active' uniquement à ce lien
+            // Effet CSS: couleur différente, soulignement, etc.
         }
     });
 }
 
-// ÉCOUTE L'ÉVÉNEMENT SCROLL
-// À chaque scroll, la fonction updateNavigation() est appelée
+// ─────────────────────────────────
+// ACTIVATION DE LA FONCTION AU SCROLL
+// ─────────────────────────────────
+// Écoute l'événement 'scroll' sur la fenêtre
+// À CHAQUE pixel scrollé, updateNavigation() est exécutée
 window.addEventListener('scroll', updateNavigation);
 
 // ================================
-// Smooth scrolling pour les liens d'ancrage
+// DÉFILEMENT FLUIDE (Smooth Scrolling)
 // ================================
+// Remplace le scroll instantané par une animation fluide lors du clic sur les liens d'ancrage
+// Améliore l'expérience utilisateur en rendant la navigation plus douce et professionnelle
+
 function smoothScroll() {
+    // Parcourt tous les liens de navigation
     navLinks.forEach(link => {
+        // Ajoute un écouteur sur chaque lien
         link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetId = link.getAttribute('href');
-            const targetSection = document.querySelector(targetId);
+            // 1. EMPÊCHE LE COMPORTEMENT PAR DÉFAUT
+            e.preventDefault(); // Bloque le scroll instantané natif du navigateur
             
-            if (targetSection) {
+            // 2. RÉCUPÈRE LA CIBLE DU LIEN
+            const targetId = link.getAttribute('href'); // Ex: "#about", "#services"
+            const targetSection = document.querySelector(targetId); // Sélectionne la section correspondante
+            
+            // 3. VÉRIFIE QUE LA SECTION EXISTE
+            if (targetSection) { // Protection: si la section n'existe pas, ne fait rien
+                // 4. DÉFILE VERS LA SECTION AVEC ANIMATION
                 targetSection.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
+                    behavior: 'smooth', // Animation fluide au lieu d'instantané
+                    block: 'start' // Aligne le haut de la section avec le haut du viewport
+                    // Alternatives: 'center' (centre), 'end' (bas), 'nearest' (plus proche)
                 });
             }
         });
     });
 }
 
-smoothScroll();
+// ─────────────────────────────────
+// INITIALISATION DU SMOOTH SCROLL
+// ─────────────────────────────────
+smoothScroll(); // Active le défilement fluide immédiatement au chargement
 
 // ================================
-// ANIMATION DES COMPTEURS (Count Up)
+// ANIMATION DES COMPTEURS (Count Up Effect)
 // ================================
-// Anime les chiffres des statistiques de 0 vers leur valeur finale
-// Utilise l'Intersection Observer API pour déclencher uniquement quand visible
+// Anime les chiffres des statistiques de 0 jusqu'à leur valeur finale
+// L'animation se déclenche uniquement quand les compteurs deviennent visibles
+// Utilise Intersection Observer API pour optimiser les performances
 
 function animateCounters() {
     // ─────────────────────────────────
-    // 1. CONFIGURATION DE L'OBSERVER
+    // ÉTAPE 1: CONFIGURATION DE L'OBSERVER
     // ─────────────────────────────────
     const observerOptions = {
-        threshold: 0.5, // L'élément doit être visible à 50% (0.5 = 50%)
-        rootMargin: '0px 0px -100px 0px' // Marge: déclenche 100px avant que l'élément soit visible
+        threshold: 0.5, // Déclenche quand 50% de l'élément est visible (0 = dès qu'il apparaît, 1 = complètement visible)
+        rootMargin: '0px 0px -100px 0px' // Marges: top right bottom left
+        // -100px en bas = déclenche 100px AVANT que l'élément soit visible (anticipation)
     };
 
     // ─────────────────────────────────
-    // 2. CRÉATION DE L'INTERSECTION OBSERVER
+    // ÉTAPE 2: CRÉATION DE L'INTERSECTION OBSERVER
     // ─────────────────────────────────
-    // Observer = surveille quand un élément devient visible dans le viewport
+    // IntersectionObserver = API native qui surveille la visibilité d'éléments dans le viewport
     const observer = new IntersectionObserver((entries) => {
-        // entries = tableau d'éléments observés qui ont changé de visibilité
+        // Callback appelé quand la visibilité d'un élément observé change
+        // entries = tableau contenant tous les éléments dont la visibilité a changé
+        
         entries.forEach(entry => {
-            // isIntersecting = true si l'élément est visible
-            if (entry.isIntersecting) {
-                const counter = entry.target; // L'élément compteur
-                const target = parseInt(counter.getAttribute('data-count')); // Valeur finale (ex: data-count="150")
-                let current = 0; // Valeur actuelle du compteur (commence à 0)
-                const increment = target / 100; // Incrément à chaque step (divise par 100 pour 100 steps)
+            // entry.isIntersecting = true si l'élément est entré dans le viewport
+            // entry.isIntersecting = false si l'élément est sorti du viewport
+            if (entry.isIntersecting) { // Si le compteur est maintenant visible
+                const counter = entry.target; // L'élément HTML du compteur (span.stat-number)
+                
+                // Récupère la valeur finale depuis l'attribut data-count
+                // HTML: <span class="stat-number" data-count="150">0</span>
+                const target = parseInt(counter.getAttribute('data-count')); // Ex: 150
+                
+                let current = 0; // Valeur de départ (0)
+                const increment = target / 100; // Incrément par step (ex: 150/100 = 1.5 par step)
+                // 100 steps = animation fluide
                 
                 // ─────────────────────────────────
-                // 3. ANIMATION DU COMPTEUR
+                // ÉTAPE 3: ANIMATION DU COMPTEUR
                 // ─────────────────────────────────
-                // setInterval = répète une fonction toutes les X millisecondes
+                // setInterval() = exécute une fonction à intervalles réguliers
                 const timer = setInterval(() => {
-                    current += increment; // Augmente la valeur
+                    current += increment; // Ajoute l'incrément à chaque itération
                     
-                    // Si on atteint ou dépasse la cible
+                    // Vérifie si on a atteint ou dépassé la valeur cible
                     if (current >= target) {
-                        current = target; // Force la valeur exacte
-                        clearInterval(timer); // Arrête l'animation
+                        current = target; // Force la valeur exacte finale
+                        clearInterval(timer); // Arrête le timer (arrête l'animation)
                     }
                     
-                    // Met à jour le texte affiché (arrondi à l'entier inférieur)
+                    // Met à jour le texte visible dans le compteur
+                    // Math.floor() = arrondit à l'entier inférieur (149.7 → 149)
                     counter.textContent = Math.floor(current);
-                }, 20); // Exécute toutes les 20ms (50 fois par seconde)
+                }, 20); // Répète toutes les 20 millisecondes (50 fois par seconde = 50 FPS)
+                // Total: 100 steps × 20ms = 2000ms = 2 secondes d'animation
                 
-                // Arrête d'observer cet élément (animation ne se déclenche qu'une fois)
+                // ─────────────────────────────────
+                // ÉTAPE 4: ARRÊT DE L'OBSERVATION
+                // ─────────────────────────────────
+                // unobserve() = arrête la surveillance de cet élément
+                // Empêche l'animation de se relancer si on rescroll vers cette section
                 observer.unobserve(counter);
             }
         });
-    }, observerOptions);
+    }, observerOptions); // Options passées à l'observer
 
     // ─────────────────────────────────
-    // 4. OBSERVATION DES COMPTEURS
+    // ÉTAPE 5: DÉMARRAGE DE L'OBSERVATION
     // ─────────────────────────────────
-    // Pour chaque élément .stat-number, on active l'observation
+    // Parcourt tous les compteurs et démarre leur surveillance
     statNumbers.forEach(counter => {
-        observer.observe(counter); // Commence à surveiller cet élément
+        observer.observe(counter); // Active l'observation pour cet élément
+        // L'animation se déclenchera automatiquement quand il deviendra visible
     });
 }
 
-// Lance la fonction
-animateCounters();
+// ─────────────────────────────────
+// LANCEMENT DE LA FONCTION
+// ─────────────────────────────────
+animateCounters(); // Initialise les observateurs immédiatement
 
 // ================================
-// Filtrage du portfolio
+// SYSTÈME DE FILTRAGE DU PORTFOLIO
 // ================================
+// Permet de filtrer les projets par catégorie (Tous, Sites Web, Applications, etc.)
+// Avec animations de transition lors du changement de filtre
+
 function initPortfolioFilter() {
+    // Parcourt tous les boutons de filtre
     filterButtons.forEach(button => {
+        // Ajoute un écouteur de clic sur chaque bouton
         button.addEventListener('click', () => {
-            // Mettre à jour les boutons actifs
+            // ─────────────────────────────────
+            // ÉTAPE 1: MISE À JOUR DES BOUTONS ACTIFS
+            // ─────────────────────────────────
+            // Retire la classe 'active' de tous les boutons
             filterButtons.forEach(btn => btn.classList.remove('active'));
+            // Ajoute 'active' uniquement au bouton cliqué (style différent en CSS)
             button.classList.add('active');
 
+            // ─────────────────────────────────
+            // ÉTAPE 2: RÉCUPÉRATION DU FILTRE
+            // ─────────────────────────────────
+            // Lit l'attribut data-filter du bouton cliqué
+            // Ex: <button data-filter="web">Sites Web</button> → filter = "web"
             const filter = button.getAttribute('data-filter');
 
-            // Filtrer les éléments du portfolio
+            // ─────────────────────────────────
+            // ÉTAPE 3: FILTRAGE DES PROJETS
+            // ─────────────────────────────────
+            // Parcourt tous les éléments du portfolio
             portfolioItems.forEach(item => {
+                // Récupère la catégorie de chaque projet
+                // Ex: <div class="portfolio-item" data-category="web">
                 const category = item.getAttribute('data-category');
                 
+                // ─────────────────────────────────
+                // CONDITION: AFFICHER OU MASQUER ?
+                // ─────────────────────────────────
                 if (filter === 'all' || category === filter) {
-                    item.classList.remove('hide');
-                    item.style.display = 'block';
+                    // CAS 1: Filtre "Tous" OU catégorie correspond au filtre
+                    item.classList.remove('hide'); // Retire classe hide (animation fade-in en CSS)
+                    item.style.display = 'block'; // Affiche l'élément (visible)
                 } else {
-                    item.classList.add('hide');
+                    // CAS 2: Catégorie ne correspond pas au filtre
+                    item.classList.add('hide'); // Ajoute classe hide (animation fade-out en CSS)
+                    
+                    // Délai avant de masquer complètement (laisse le temps à l'animation CSS)
                     setTimeout(() => {
-                        item.style.display = 'none';
-                    }, 300);
+                        item.style.display = 'none'; // Masque l'élément (retire de la mise en page)
+                    }, 300); // 300ms = durée de l'animation CSS de fade-out
                 }
             });
         });
     });
 }
 
-initPortfolioFilter();
+// ─────────────────────────────────
+// INITIALISATION DU FILTRE
+// ─────────────────────────────────
+initPortfolioFilter(); // Active le système de filtrage dès le chargement
 
 // ================================
-// Modal du portfolio
+// BASE DE DONNÉES DES PROJETS
 // ================================
+// Objet contenant toutes les informations détaillées de chaque projet
+// Structure: ID du projet → { propriétés du projet }
+// Ces données sont utilisées pour remplir la modal quand on clique sur "Voir le projet"
+
 const projectData = {
     1: {
         title: "Salle de combat mixte Fight Club", 
@@ -490,199 +656,336 @@ const projectData = {
     }
 };
 
+// ================================
+// INITIALISATION DU SYSTÈME DE MODAL
+// ================================
+// Configure tous les événements pour ouvrir/fermer la modal des projets
+// La modal affiche les détails complets d'un projet (image, description, technologies, liens)
+
 function initModal() {
-    console.log('🔧 Initialisation de la modal...');
+    console.log('🔧 Initialisation de la modal...'); // Log de débogage
     
-    // Vérifier que la modal existe
-    if (!modal) {
-        console.error('❌ Modal introuvable!');
-        return;
+    // ─────────────────────────────────
+    // ÉTAPE 1: VÉRIFICATIONS DE SÉCURITÉ
+    // ─────────────────────────────────
+    // Vérifie que l'élément modal existe dans le DOM
+    if (!modal) { // Si modal est null ou undefined
+        console.error('❌ Modal introuvable!'); // Affiche erreur dans la console
+        return; // Sort de la fonction (arrête l'exécution)
     }
-    console.log('✅ Modal trouvée:', modal);
+    console.log('✅ Modal trouvée:', modal); // Confirmation que la modal existe
     
+    // ─────────────────────────────────
+    // ÉTAPE 2: SÉLECTION DES LIENS PORTFOLIO
+    // ─────────────────────────────────
+    // Sélectionne tous les liens avec data-project (icônes œil dans le portfolio)
     const portfolioLinks = document.querySelectorAll('.portfolio-link[data-project]');
     console.log('🔗 Nombre de liens portfolio trouvés:', portfolioLinks.length);
     
+    // Vérification: s'il n'y a aucun lien, sortir de la fonction
     if (portfolioLinks.length === 0) {
         console.warn('⚠️ Aucun lien portfolio trouvé avec data-project');
-        return;
+        return; // Pas de liens = pas besoin de continuer
     }
     
+    // ─────────────────────────────────
+    // ÉTAPE 3: AJOUT DES ÉVÉNEMENTS DE CLIC
+    // ─────────────────────────────────
+    // Parcourt chaque lien et ajoute un écouteur de clic
     portfolioLinks.forEach((link, index) => {
         console.log(`📌 Lien ${index + 1}:`, link, 'data-project:', link.getAttribute('data-project'));
         
+        // Événement: Clic sur le lien (ou sur l'icône à l'intérieur)
         link.addEventListener('click', (e) => {
-            console.log('🖱️ CLIC DÉTECTÉ!', e.target, e.currentTarget);
-            e.preventDefault();
+            console.log('🖱️ CLIC DÉTECTÉ!', e.target, e.currentTarget); // Debug
+            e.preventDefault(); // Empêche la navigation par défaut (href="#")
             
-            let target = e.target;
-            let projectLink = target.closest('.portfolio-link[data-project]');
+            // ─────────────────────────────────
+            // GESTION DU CLIC SUR ICÔNE ENFANT
+            // ─────────────────────────────────
+            // Problème: Si on clique sur l'icône <i>, e.target = <i> et non <a>
+            // Solution: Remonter au parent .portfolio-link avec closest()
+            let target = e.target; // Élément réellement cliqué (peut être <i> ou <a>)
+            let projectLink = target.closest('.portfolio-link[data-project]'); // Remonte au lien parent
             
+            // Vérification: le lien parent existe-t-il ?
             if (!projectLink) {
                 console.warn('⚠️ Lien portfolio non trouvé');
-                return;
+                return; // Sort si problème
             }
             
-            const projectId = projectLink.getAttribute('data-project');
-            const project = projectData[projectId];
+            // ─────────────────────────────────
+            // RÉCUPÉRATION DES DONNÉES DU PROJET
+            // ─────────────────────────────────
+            const projectId = projectLink.getAttribute('data-project'); // Ex: "1", "2", "3"
+            const project = projectData[projectId]; // Récupère l'objet du projet dans projectData
             
             console.log('✨ Clic sur projet:', projectId, 'depuis élément:', target.tagName);
             
+            // Vérification: le projet existe-t-il dans projectData ?
             if (project) {
-                openModal(project);
+                openModal(project); // Ouvre la modal avec les données du projet
             } else {
-                console.error('❌ Projet non trouvé:', projectId);
+                console.error('❌ Projet non trouvé:', projectId); // Erreur si ID invalide
             }
         });
     });
 
-    // Fermer la modal avec le bouton X
-    if (modalClose) {
-        modalClose.addEventListener('click', closeModal);
+    // ─────────────────────────────────
+    // ÉTAPE 4: ÉVÉNEMENTS DE FERMETURE
+    // ─────────────────────────────────
+    
+    // MÉTHODE 1: Fermer avec le bouton X
+    if (modalClose) { // Vérifie que le bouton existe
+        modalClose.addEventListener('click', closeModal); // Clic sur X → ferme la modal
     }
     
-    // Fermer la modal en cliquant sur le fond
+    // MÉTHODE 2: Fermer en cliquant sur le fond sombre (overlay)
     modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            closeModal();
+        // e.target = élément exact cliqué
+        // modal = la div.modal (overlay + contenu)
+        if (e.target === modal) { // Si clic directement sur le fond (pas sur le contenu)
+            closeModal(); // Ferme la modal
         }
+        // Si clic sur modal-content, e.target !== modal, donc ne ferme pas
     });
 
-    // Fermer avec la touche Escape
+    // MÉTHODE 3: Fermer avec la touche Échap (Escape)
     document.addEventListener('keydown', (e) => {
+        // e.key = la touche pressée (ex: "Escape", "Enter", "a")
+        // Condition: touche Escape ET modal actuellement affichée
         if (e.key === 'Escape' && modal.style.display === 'block') {
-            closeModal();
+            closeModal(); // Ferme la modal
         }
     });
 }
+
+// ================================
+// OUVERTURE DE LA MODAL
+// ================================
+// Remplit la modal avec les données d'un projet et l'affiche
+// Paramètre: project = objet contenant toutes les infos du projet
 
 function openModal(project) {
-    console.log('Ouverture modal pour:', project.title); // Debug
+    console.log('Ouverture modal pour:', project.title); // Log de débogage
     
-    // Récupère les éléments de la modal
-    const modalImage = document.getElementById('modalImage');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalDescription = document.getElementById('modalDescription');
-    const modalLiveLink = document.getElementById('modalLiveLink');
-    const modalCodeLink = document.getElementById('modalCodeLink');
-    const techContainer = document.getElementById('modalTech');
+    // ─────────────────────────────────
+    // ÉTAPE 1: SÉLECTION DES ÉLÉMENTS DOM
+    // ─────────────────────────────────
+    // Récupère tous les éléments de la modal qui doivent être remplis
+    const modalImage = document.getElementById('modalImage'); // Image du projet
+    const modalTitle = document.getElementById('modalTitle'); // Titre h3
+    const modalDescription = document.getElementById('modalDescription'); // Description p
+    const modalLiveLink = document.getElementById('modalLiveLink'); // Bouton "Voir le site"
+    const modalCodeLink = document.getElementById('modalCodeLink'); // Bouton "Code source"
+    const techContainer = document.getElementById('modalTech'); // Container des badges technologies
     
-    // Vérifie que tous les éléments existent
+    // ─────────────────────────────────
+    // ÉTAPE 2: VÉRIFICATION DE SÉCURITÉ
+    // ─────────────────────────────────
+    // Vérifie que tous les éléments essentiels existent
     if (!modalImage || !modalTitle || !modalDescription || !techContainer) {
-        console.error('Éléments de la modal manquants!');
-        return;
+        console.error('Éléments de la modal manquants!'); // Erreur si élément manquant
+        return; // Sort de la fonction (n'ouvre pas la modal)
     }
     
-    // Remplit la modal avec les données du projet
-    modalImage.src = project.image;
-    modalImage.alt = project.title;
-    modalTitle.textContent = project.title;
-    modalDescription.textContent = project.description;
+    // ─────────────────────────────────
+    // ÉTAPE 3: REMPLISSAGE DES DONNÉES
+    // ─────────────────────────────────
     
-    if (modalLiveLink) modalLiveLink.href = project.liveLink;
-    if (modalCodeLink) modalCodeLink.href = project.codeLink;
+    // IMAGE
+    modalImage.src = project.image; // Change la source de l'image (ex: "images/projet01.png")
+    modalImage.alt = project.title; // Ajoute texte alternatif pour accessibilité
     
-    // Ajoute les technologies
-    techContainer.innerHTML = '';
+    // TITRE
+    modalTitle.textContent = project.title; // Change le texte du titre (ex: "Fight Club")
+    
+    // DESCRIPTION
+    modalDescription.textContent = project.description; // Change le texte de la description
+    
+    // LIENS (avec vérification d'existence)
+    if (modalLiveLink) modalLiveLink.href = project.liveLink; // Lien vers le site en ligne
+    if (modalCodeLink) modalCodeLink.href = project.codeLink; // Lien vers le code source (GitHub)
+    
+    // ─────────────────────────────────
+    // ÉTAPE 4: GÉNÉRATION DES BADGES DE TECHNOLOGIES
+    // ─────────────────────────────────
+    // TECHNOLOGIES (array)
+    // project.technologies = ["HTML5", "CSS3", "JavaScript"]
+    
+    techContainer.innerHTML = ''; // Vide le conteneur (retire les anciennes technologies)
+    
+    // Parcourt chaque technologie et crée un badge
     project.technologies.forEach(tech => {
-        const tag = document.createElement('span');
-        tag.className = 'tech-tag';
-        tag.textContent = tech;
-        techContainer.appendChild(tag);
+        const tag = document.createElement('span'); // Crée un span pour chaque techno
+        tag.className = 'tech-tag'; // Classe CSS (badge style pill)
+        tag.textContent = tech; // Texte du badge (ex: "React")
+        techContainer.appendChild(tag); // Ajoute le badge au conteneur
     });
+    // Résultat HTML: <span class="tech-tag">React</span><span class="tech-tag">Node.js</span>...
     
-    // Affiche la modal
-    modal.style.display = 'block';
-    document.body.style.overflow = 'hidden'; // Bloque le scroll de la page
+    // ─────────────────────────────────
+    // ÉTAPE 5: AFFICHAGE DE LA MODAL
+    // ─────────────────────────────────
+    modal.style.display = 'block'; // Affiche la modal (passe de display:none à display:block)
+    document.body.style.overflow = 'hidden'; // Bloque le scroll de la page principale
+    // Empêche de scroller en arrière-plan pendant que la modal est ouverte
     
-    console.log('Modal ouverte!'); // Debug
+    console.log('Modal ouverte!'); // Confirmation dans la console
 }
 
+// ================================
+// FERMETURE DE LA MODAL
+// ================================
+// Cache la modal et réactive le scroll de la page
+
 function closeModal() {
-    console.log('Fermeture modal'); // Debug
-    modal.style.display = 'none';
-    document.body.style.overflow = 'auto'; // Réactive le scroll de la page
+    console.log('Fermeture modal'); // Log de débogage
+    modal.style.display = 'none'; // Cache la modal (display: none)
+    document.body.style.overflow = 'auto'; // Réactive le scroll de la page principale
+    // Permet de nouveau de scroller la page normalement
 }
 
 // initModal(); sera appelé dans DOMContentLoaded
 
 // ================================
-// Formulaire de contact
+// GESTION DU FORMULAIRE DE CONTACT
 // ================================
+// Gère l'envoi du formulaire avec validation, feedback visuel et notification
+// Utilise async/await pour simuler un envoi asynchrone
+
 function initContactForm() {
+    // Ajoute un écouteur sur la soumission du formulaire
     contactForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
+        // ─────────────────────────────────
+        // ÉTAPE 1: EMPÊCHER LA SOUMISSION NORMALE
+        // ─────────────────────────────────
+        e.preventDefault(); // Empêche le rechargement de la page (comportement par défaut)
         
-        const formData = new FormData(contactForm);
-        const submitButton = contactForm.querySelector('button[type="submit"]');
-        const originalText = submitButton.innerHTML;
+        // ─────────────────────────────────
+        // ÉTAPE 2: RÉCUPÉRATION DES DONNÉES
+        // ─────────────────────────────────
+        const formData = new FormData(contactForm); // Crée un objet FormData avec toutes les valeurs
+        // formData contient: name, email, subject, message
         
-        // Désactiver le bouton et montrer le loading
-        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
-        submitButton.disabled = true;
+        const submitButton = contactForm.querySelector('button[type="submit"]'); // Sélectionne le bouton
+        const originalText = submitButton.innerHTML; // Sauvegarde le texte original du bouton
+        
+        // ─────────────────────────────────
+        // ÉTAPE 3: ÉTAT DE CHARGEMENT
+        // ─────────────────────────────────
+        // Change l'apparence du bouton pendant l'envoi
+        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...'; // Icône spinner qui tourne
+        submitButton.disabled = true; // Désactive le bouton (empêche double clic)
         
         try {
-            // Simulation d'envoi (remplacer par votre logique d'envoi réelle)
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            // ─────────────────────────────────
+            // ÉTAPE 4: ENVOI DES DONNÉES
+            // ─────────────────────────────────
+            // SIMULATION d'envoi avec délai de 2 secondes
+            // EN PRODUCTION: Remplacer par fetch() vers API ou backend
+            await new Promise(resolve => setTimeout(resolve, 2000)); // Attend 2 secondes
             
-            // Succès
-            showNotification('Message envoyé avec succès !', 'success');
-            createConfetti(); // Effet de confettis
-            contactForm.reset();
+            // Exemple de vrai envoi (à décommenter et adapter):
+            // const response = await fetch('/api/contact', {
+            //     method: 'POST',
+            //     body: formData
+            // });
+            // if (!response.ok) throw new Error('Erreur serveur');
+            
+            // ─────────────────────────────────
+            // ÉTAPE 5: SUCCÈS
+            // ─────────────────────────────────
+            showNotification('Message envoyé avec succès !', 'success'); // Notification verte
+            createConfetti(); // Effet de confettis festif
+            contactForm.reset(); // Vide tous les champs du formulaire
             
         } catch (error) {
-            // Erreur
-            showNotification('Erreur lors de l\'envoi. Veuillez réessayer.', 'error');
+            // ─────────────────────────────────
+            // ÉTAPE 6: ERREUR
+            // ─────────────────────────────────
+            showNotification('Erreur lors de l\'envoi. Veuillez réessayer.', 'error'); // Notification rouge
+            console.error('Erreur:', error); // Log l'erreur dans la console
+            
         } finally {
-            // Restaurer le bouton
-            submitButton.innerHTML = originalText;
-            submitButton.disabled = false;
+            // ─────────────────────────────────
+            // ÉTAPE 7: RESTAURATION DU BOUTON
+            // ─────────────────────────────────
+            // finally = exécuté TOUJOURS (succès OU erreur)
+            submitButton.innerHTML = originalText; // Remet le texte original
+            submitButton.disabled = false; // Réactive le bouton
         }
     });
 }
 
+// ================================
+// SYSTÈME DE NOTIFICATIONS (Toast)
+// ================================
+// Affiche des notifications temporaires en haut à droite de l'écran
+// Type: 'success' (vert) ou 'error' (rouge)
+
 function showNotification(message, type) {
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
+    // ─────────────────────────────────
+    // ÉTAPE 1: CRÉATION DE L'ÉLÉMENT
+    // ─────────────────────────────────
+    const notification = document.createElement('div'); // Crée une div pour la notification
+    notification.className = `notification ${type}`; // Classes: notification success OU notification error
+    
+    // Contenu HTML avec icône Font Awesome + message
     notification.innerHTML = `
         <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
         <span>${message}</span>
     `;
+    // Icône: ✓ pour succès, ! pour erreur
     
-    // Styles inline pour la notification
+    // ─────────────────────────────────
+    // ÉTAPE 2: STYLES INLINE
+    // ─────────────────────────────────
+    // Object.assign() = applique plusieurs propriétés CSS en une fois
     Object.assign(notification.style, {
-        position: 'fixed',
-        top: '20px',
-        right: '20px',
-        background: type === 'success' ? '#00b894' : '#e17055',
-        color: 'white',
-        padding: '1rem 1.5rem',
-        borderRadius: '8px',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '0.5rem',
-        zIndex: '9999',
-        boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)',
-        transform: 'translateX(100%)',
-        transition: 'transform 0.3s ease'
+        position: 'fixed', // Position fixe (ne scroll pas)
+        top: '20px', // 20px depuis le haut
+        right: '20px', // 20px depuis la droite
+        background: type === 'success' ? '#00b894' : '#e17055', // Vert si succès, rouge si erreur
+        color: 'white', // Texte blanc
+        padding: '1rem 1.5rem', // Espacement intérieur
+        borderRadius: '8px', // Coins arrondis
+        display: 'flex', // Flexbox pour aligner icône + texte
+        alignItems: 'center', // Centre verticalement
+        gap: '0.5rem', // Espace entre icône et texte
+        zIndex: '9999', // Au-dessus de tout
+        boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)', // Ombre portée
+        transform: 'translateX(100%)', // Commence hors écran (à droite)
+        transition: 'transform 0.3s ease' // Transition fluide pour l'animation
     });
     
-    document.body.appendChild(notification);
+    // ─────────────────────────────────
+    // ÉTAPE 3: AJOUT AU DOM
+    // ─────────────────────────────────
+    document.body.appendChild(notification); // Ajoute la notification à la page
     
-    // Animation d'entrée
+    // ─────────────────────────────────
+    // ÉTAPE 4: ANIMATION D'ENTRÉE
+    // ─────────────────────────────────
+    // Attend 100ms puis slide depuis la droite
     setTimeout(() => {
-        notification.style.transform = 'translateX(0)';
-    }, 100);
+        notification.style.transform = 'translateX(0)'; // Ramène à sa position normale
+    }, 100); // Petit délai pour que la transition CSS fonctionne
     
-    // Suppression automatique
+    // ─────────────────────────────────
+    // ÉTAPE 5: SUPPRESSION AUTOMATIQUE
+    // ─────────────────────────────────
+    // Après 3 secondes, slide vers la droite et supprime
     setTimeout(() => {
-        notification.style.transform = 'translateX(100%)';
+        notification.style.transform = 'translateX(100%)'; // Slide vers la droite (hors écran)
+        
+        // Attend la fin de l'animation avant de supprimer du DOM
         setTimeout(() => {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
+            if (notification.parentNode) { // Vérifie que l'élément est toujours dans le DOM
+                notification.parentNode.removeChild(notification); // Supprime l'élément
             }
-        }, 300);
-    }, 3000);
+        }, 300); // 300ms = durée de la transition
+    }, 3000); // 3000ms = 3 secondes d'affichage
 }
 
 initContactForm();

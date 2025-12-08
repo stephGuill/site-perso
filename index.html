@@ -4,175 +4,664 @@
     ============================================
     Auteur: StephGraph
     Description: Site portfolio moderne avec design glassmorphism
-    Technologies: HTML5, CSS3, JavaScript 
+    Technologies: HTML5, CSS3, JavaScript (Vanilla)
 -->
 
-<!DOCTYPE html> <!-- Déclaration du type de document HTML5 -->
-<html lang="fr"> <!-- Balise racine HTML avec langue française pour l'accessibilité -->
+<!-- ═══════════════════════════════════════════════════════════════════════════════
+     DOCTYPE - DÉCLARATION DU TYPE DE DOCUMENT
+     ═══════════════════════════════════════════════════════════════════════════════
+     Indique au navigateur qu'il s'agit d'un document HTML5 (dernière version)
+     DOIT être la première ligne du fichier (avant <html>)
+     Permet au navigateur d'interpréter correctement le code
+     ═══════════════════════════════════════════════════════════════════════════════
+-->
+<!DOCTYPE html>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════════
+     BALISE HTML - ÉLÉMENT RACINE DU DOCUMENT
+     ═══════════════════════════════════════════════════════════════════════════════
+     <html> = Contient TOUT le document (head + body)
+     lang="fr" = Définit la langue du contenu (français)
+                 Important pour:
+                 - Accessibilité (lecteurs d'écran)
+                 - SEO (référencement Google)
+                 - Traduction automatique du navigateur
+     Autres langues: lang="en" (anglais), lang="es" (espagnol)
+     ═══════════════════════════════════════════════════════════════════════════════
+-->
+<html lang="fr">
+
+<!-- ═══════════════════════════════════════════════════════════════════════════════
+     SECTION HEAD - MÉTADONNÉES ET RESSOURCES
+     ═══════════════════════════════════════════════════════════════════════════════
+     Contient les informations sur le document (non visibles à l'écran)
+     Inclut: titre, encodage, styles CSS, polices, scripts, SEO
+     Chargé AVANT le <body> par le navigateur
+     ═══════════════════════════════════════════════════════════════════════════════
+-->
 <head>
-    <!-- META TAGS - Informations sur le document -->
-    <meta charset="UTF-8"> <!-- Encodage des caractères en UTF-8 pour supporter les caractères spéciaux -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Configuration responsive: adapte la largeur à l'écran -->
-    <title>Portfolio - WebDesigner Professionnel</title> <!-- Titre affiché dans l'onglet du navigateur -->
+    <!-- ───────────────────────────────────────────────────────────────────────────
+         META CHARSET - ENCODAGE DES CARACTÈRES
+         ───────────────────────────────────────────────────────────────────────────
+         UTF-8 = Format universel supportant TOUS les caractères:
+         - Lettres accentuées (é, à, ç, ñ, ü)
+         - Symboles spéciaux (€, ©, ™, ®)
+         - Emojis (😊, 🚀, ✨)
+         - Alphabets non-latins (арабе, 中文, 日本語)
+         DOIT être dans les 1024 premiers octets du fichier
+         ───────────────────────────────────────────────────────────────────────────
+    -->
+    <meta charset="UTF-8">
     
-    <!-- GOOGLE FONTS - Police Poppins avec différentes graisses (300 à 700) -->
+    <!-- ───────────────────────────────────────────────────────────────────────────
+         META VIEWPORT - CONFIGURATION RESPONSIVE
+         ───────────────────────────────────────────────────────────────────────────
+         ESSENTIEL pour que le site s'adapte aux mobiles/tablettes
+         width=device-width : La largeur de la page = largeur de l'appareil
+                             (320px sur iPhone SE, 768px sur iPad, 1920px sur PC)
+         initial-scale=1.0 : Zoom initial à 100% (pas de zoom automatique)
+         Sans cette balise: Le mobile affiche la version desktop en minuscule
+         ───────────────────────────────────────────────────────────────────────────
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- ───────────────────────────────────────────────────────────────────────────
+         TITLE - TITRE DE LA PAGE
+         ───────────────────────────────────────────────────────────────────────────
+         Affiché dans:
+         - L'onglet du navigateur (tab)
+         - Les résultats de recherche Google
+         - Les favoris/marque-pages
+         - Le partage sur réseaux sociaux
+         Maximum: 50-60 caractères pour le SEO
+         ───────────────────────────────────────────────────────────────────────────
+    -->
+    <title>Portfolio - WebDesigner Professionnel</title>
+    
+    <!-- ───────────────────────────────────────────────────────────────────────────
+         GOOGLE FONTS - IMPORTATION DE LA POLICE POPPINS
+         ───────────────────────────────────────────────────────────────────────────
+         Service gratuit de Google pour utiliser des polices web
+         Poppins = Police moderne, géométrique, très lisible
+         wght@300;400;500;600;700 = 5 graisses (épaisseurs):
+           300 = Light (fin)
+           400 = Regular (normal)
+           500 = Medium (moyen)
+           600 = SemiBold (semi-gras)
+           700 = Bold (gras)
+         display=swap = Affiche texte immédiatement (police de secours d'abord)
+         Alternative: Télécharger la police et l'héberger localement
+         ───────────────────────────────────────────────────────────────────────────
+    -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- FONT AWESOME - Bibliothèque d'icônes vectorielles (version 6.0.0) -->
+    <!-- ───────────────────────────────────────────────────────────────────────────
+         FONT AWESOME - BIBLIOTHÈQUE D'ICÔNES
+         ───────────────────────────────────────────────────────────────────────────
+         6500+ icônes vectorielles gratuites et professionnelles
+         Version 6.0.0 chargée depuis CDN (Content Delivery Network)
+         CDN = Serveur ultra-rapide proche de l'utilisateur
+         Utilisation: <i class="fas fa-nom-icone"></i>
+         Exemples: fa-home, fa-user, fa-envelope, fa-phone
+         Categories: fas (solid), far (regular), fab (brands)
+         Alternative: Télécharger Font Awesome localement
+         ───────────────────────────────────────────────────────────────────────────
+    -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <!-- FEUILLE DE STYLES CSS - Styles personnalisés du site -->
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/placeholder.css">
-</head>
-<body> <!-- Corps du document - Contient tout le contenu visible -->
-    <!-- 
-        ============================================
-        HEADER & NAVIGATION
-        ============================================
-        - Position fixe en haut de page (fixed)
-        - Effet glassmorphism (fond flou transparent)
-        - Navigation responsive avec menu burger
-        - Active link selon la section visible
+    <!-- ───────────────────────────────────────────────────────────────────────────
+         FEUILLE DE STYLES CSS - STYLES PERSONNALISÉS
+         ───────────────────────────────────────────────────────────────────────────
+         Fichier CSS externe contenant TOUS les styles du site
+         rel="stylesheet" = Type de relation (feuille de style)
+         href="style.css" = Chemin vers le fichier CSS (dans le même dossier)
+         Chargé de manière BLOQUANTE (empêche l'affichage tant que non chargé)
+         Ordre important: chargé APRÈS les fonts pour éviter FOUT (Flash Of Unstyled Text)
+         ───────────────────────────────────────────────────────────────────────────
     -->
-    <header class="header"> <!-- En-tête fixe du site -->
-        <nav class="navbar"> <!-- Barre de navigation principale -->
-            <div class="nav-container"> <!-- Container pour centrer et limiter la largeur -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<!-- ═══════════════════════════════════════════════════════════════════════════════
+     BALISE BODY - CONTENU VISIBLE DU SITE
+     ═══════════════════════════════════════════════════════════════════════════════
+     Contient TOUT ce qui est visible à l'écran:
+     - Header (navigation)
+     - Sections (home, about, services, portfolio, contact)
+     - Footer
+     - Modals
+     Styles appliqués: dégradé de fond, police Poppins, couleurs
+     ═══════════════════════════════════════════════════════════════════════════════
+-->
+<body>
+    <!-- ═══════════════════════════════════════════════════════════════════════════
+         SECTION 1: HEADER & NAVIGATION
+         ═══════════════════════════════════════════════════════════════════════════
+         RÔLE: Barre de navigation fixe en haut de page
+         STRUCTURE:
+           - Logo à gauche (icône + texte)
+           - Menu horizontal au centre (desktop)
+           - Bouton burger à droite (mobile)
+         COMPORTEMENTS:
+           - Position: fixed (reste visible au scroll)
+           - Glassmorphism: fond flou transparent
+           - Active state: lien surligné selon section visible
+           - Responsive: menu burger < 768px
+         ═══════════════════════════════════════════════════════════════════════════
+    -->
+    <header class="header">
+        <!-- ───────────────────────────────────────────────────────────────────────
+             NAVIGATION PRINCIPALE
+             ───────────────────────────────────────────────────────────────────────
+             <nav> = Balise sémantique HTML5 pour la navigation
+             Améliore l'accessibilité et le SEO
+             ───────────────────────────────────────────────────────────────────────
+        -->
+        <nav class="navbar">
+            <!-- ───────────────────────────────────────────────────────────────────
+                 CONTAINER DE NAVIGATION
+                 ───────────────────────────────────────────────────────────────────
+                 Classe: nav-container
+                 Layout: Flexbox avec justify-content: space-between
+                 Largeur max: 1200px
+                 Centré: margin: 0 auto
+                 ───────────────────────────────────────────────────────────────────
+            -->
+            <div class="nav-container">
                 
-                <!-- LOGO - Lien vers le haut de page -->
-                <a href="#" class="nav-logo"> <!-- Lien cliquable du logo -->
-                    <i class="fas fa-palette"></i> <!-- Icône palette (Font Awesome) -->
-                    WebDesigner <!-- Texte du logo -->
+                <!-- ═══════════════════════════════════════════════════════════════
+                     LOGO DU SITE
+                     ═══════════════════════════════════════════════════════════════
+                     Structure: <a> avec icône + texte
+                     href="#" = Retour en haut de page (scroll vers #home)
+                     Classe: nav-logo (dégradé blanc, drop-shadow)
+                     ═══════════════════════════════════════════════════════════════
+                -->
+                <a href="#" class="nav-logo">
+                    <!-- Icône Font Awesome: palette de peintre -->
+                    <!-- fas = Font Awesome Solid (pleine) -->
+                    <!-- Alternative: far (regular), fal (light) -->
+                    <i class="fas fa-palette"></i>
+                    
+                    <!-- Texte du logo (nœud texte) -->
+                    WebDesigner
                 </a>
                 
-                <!-- MENU DESKTOP - Liste des liens de navigation -->
-                <ul class="nav-menu"> <!-- Liste non ordonnée pour le menu -->
-                    <li class="nav-item"> <!-- Item de liste -->
-                        <a href="#home" class="nav-link active">Accueil</a> <!-- Lien ancre vers section #home, classe 'active' par défaut -->
-                    </li>
+                <!-- ═══════════════════════════════════════════════════════════════
+                     MENU DESKTOP - LISTE DE NAVIGATION
+                     ═══════════════════════════════════════════════════════════════
+                     <ul> = Liste non ordonnée (Unordered List)
+                     <li> = Élément de liste (List Item)
+                     <a> = Lien avec ancre (#section-id)
+                     
+                     NAVIGATION PAR ANCRES:
+                     href="#home" = Scroll vers <section id="home">
+                     
+                     CLASSE ACTIVE:
+                     JavaScript détecte la section visible et ajoute .active
+                     au lien correspondant (scroll spy)
+                     ═══════════════════════════════════════════════════════════════
+                -->
+                <ul class="nav-menu">
+                    <!-- Lien 1: Accueil -->
                     <li class="nav-item">
-                        <a href="#about" class="nav-link">À propos</a> <!-- Lien vers section #about -->
+                        <!-- active = classe par défaut (page charge = section home) -->
+                        <a href="#home" class="nav-link active">Accueil</a>
                     </li>
+                    
+                    <!-- Lien 2: À propos -->
                     <li class="nav-item">
-                        <a href="#services" class="nav-link">Services</a> <!-- Lien vers section #services -->
+                        <a href="#about" class="nav-link">À propos</a>
                     </li>
+                    
+                    <!-- Lien 3: Services -->
                     <li class="nav-item">
-                        <a href="#portfolio" class="nav-link">Portfolio</a> <!-- Lien vers section #portfolio -->
+                        <a href="#services" class="nav-link">Services</a>
                     </li>
+                    
+                    <!-- Lien 4: Portfolio -->
                     <li class="nav-item">
-                        <a href="#contact" class="nav-link">Contact</a> <!-- Lien vers section #contact -->
+                        <a href="#portfolio" class="nav-link">Portfolio</a>
+                    </li>
+                    
+                    <!-- Lien 5: Contact -->
+                    <li class="nav-item">
+                        <a href="#contact" class="nav-link">Contact</a>
                     </li>
                 </ul>
                 
-                <!-- MENU BURGER - Visible uniquement sur mobile/tablette -->
-                <div class="nav-toggle"> <!-- Container du bouton burger (3 barres) -->
-                    <span class="bar"></span> <!-- Première barre du burger -->
-                    <span class="bar"></span> <!-- Deuxième barre du burger -->
-                    <span class="bar"></span> <!-- Troisième barre du burger -->
+                <!-- ═══════════════════════════════════════════════════════════════
+                     BOUTON BURGER (Menu Mobile)
+                     ═══════════════════════════════════════════════════════════════
+                     Visible uniquement sur écrans < 768px (media query CSS)
+                     Structure: 3 spans = 3 barres horizontales
+                     
+                     ANIMATION AU CLIC:
+                     JavaScript ajoute classe .active:
+                     - Barre 1: rotate(45deg) + translateY(7px)
+                     - Barre 2: opacity: 0 (disparaît)
+                     - Barre 3: rotate(-45deg) + translateY(-7px)
+                     Résultat: ☰ devient ✕
+                     ═══════════════════════════════════════════════════════════════
+                -->
+                <div class="nav-toggle">
+                    <span class="bar"></span> <!-- Barre supérieure -->
+                    <span class="bar"></span> <!-- Barre centrale -->
+                    <span class="bar"></span> <!-- Barre inférieure -->
                 </div>
             </div>
         </nav>
     </header>
 
-    <!-- 
-        ============================================
-        SECTION HERO (Page d'accueil principale)
-        ============================================
-        - Première section visible (100vh de hauteur)
-        - Layout en 2 colonnes: contenu texte + image
-        - Fond avec dégradé animé
-        - Particules animées en arrière-plan (JS)
-        - Icônes flottantes autour de l'image
+    <!-- ═══════════════════════════════════════════════════════════════════════════
+         SECTION 2: HERO (Première Section - Page d'Accueil)
+         ═══════════════════════════════════════════════════════════════════════════
+         RÔLE: Section principale d'atterrissage (première impression)
+         
+         STRUCTURE:
+           - Layout Grid 2 colonnes (texte gauche + image droite)
+           - Contenu texte: Titre H1, sous-titre H2, description, 2 boutons CTA
+           - Image: Photo de profil + 4 icônes flottantes (HTML, CSS, JS, Figma)
+         
+         DIMENSIONS:
+           - Hauteur: 100vh (toute la hauteur de l'écran)
+           - Largeur: 100% avec max-width: 1200px
+         
+         EFFETS VISUELS:
+           - Dégradé animé en arrière-plan (gradientShift)
+           - Particules flottantes générées par JavaScript (30 particules)
+           - Typing effect sur le sous-titre (machine à écrire)
+           - Animations fadeInUp sur tous les éléments texte
+           - Icônes orbitales avec effet 3D au survol
+         
+         RESPONSIVE:
+           - Desktop (>1024px): 2 colonnes côte à côte
+           - Tablette (768-1024px): 1 colonne, image en haut
+           - Mobile (<768px): 1 colonne, image réduite, texte centré
+         ═══════════════════════════════════════════════════════════════════════════
     -->
-    <section id="home" class="hero"> <!-- Section principale avec ID pour ancrage -->
-        <div class="hero-container"> <!-- Container grid 2 colonnes -->
+    <section id="home" class="hero">
+        <!-- ───────────────────────────────────────────────────────────────────────
+             CONTAINER PRINCIPAL DU HERO
+             ───────────────────────────────────────────────────────────────────────
+             Classe: hero-container
+             Display: CSS Grid avec 2 colonnes (1fr 1fr)
+             Gap: 4rem (64px d'espace entre les colonnes)
+             Align-items: center (centrage vertical)
+             ───────────────────────────────────────────────────────────────────────
+        -->
+        <div class="hero-container">
             
-            <!-- COLONNE GAUCHE - Contenu textuel -->
+            <!-- ═══════════════════════════════════════════════════════════════════
+                 COLONNE GAUCHE - CONTENU TEXTUEL
+                 ═══════════════════════════════════════════════════════════════════
+                 Contient: Titre, sous-titre, description, boutons
+                 Ordre d'animation: top → bottom (chaque élément apparaît l'un après l'autre)
+                 ═══════════════════════════════════════════════════════════════════
+            -->
             <div class="hero-content">
-                <!-- Titre principal H1 avec animation fadeInUp -->
+                <!-- ───────────────────────────────────────────────────────────────
+                     TITRE PRINCIPAL - NIVEAU 1 (H1)
+                     ───────────────────────────────────────────────────────────────
+                     <h1> = Titre le plus important de la page (SEO crucial)
+                     1 seul H1 par page recommandé
+                     Taille: 3.5rem (56px) sur desktop
+                     Animation: fadeInUp (apparition du bas vers le haut)
+                     ───────────────────────────────────────────────────────────────
+                -->
                 <h1 class="hero-title">
-                    Salut, je suis <span class="highlight">StephGraph</span> <!-- Span avec effet dégradé animé -->
+                    Salut, je suis 
+                    <!-- ───────────────────────────────────────────────────────────
+                         SPAN AVEC EFFET HIGHLIGHT
+                         ───────────────────────────────────────────────────────────
+                         Classe: highlight
+                         Effet: Dégradé animé (violet → rose → cyan)
+                         Technique: background-clip: text (dégradé sur le texte)
+                         Soulignement: ::after avec animation de défilement
+                         ───────────────────────────────────────────────────────────
+                    -->
+                    <span class="highlight">StephGraph</span>
                 </h1>
                 
-                <!-- Sous-titre H2 avec effet typing (machine à écrire) -->
+                <!-- ───────────────────────────────────────────────────────────────
+                     SOUS-TITRE - NIVEAU 2 (H2)
+                     ───────────────────────────────────────────────────────────────
+                     Classe: hero-subtitle
+                     Effet JavaScript: Typing effect (machine à écrire)
+                     Le texte s'écrit lettre par lettre avec un curseur clignotant
+                     Durée: ~3 secondes (100ms par caractère)
+                     ───────────────────────────────────────────────────────────────
+                -->
                 <h2 class="hero-subtitle">WebDesigner/Développeur Frontend/Backend</h2>
                 
-                <!-- Description/Présentation -->
+                <!-- ───────────────────────────────────────────────────────────────
+                     DESCRIPTION - PARAGRAPHE
+                     ───────────────────────────────────────────────────────────────
+                     <p> = Paragraphe de texte
+                     Classe: hero-description
+                     Couleur: Gris moyen (moins intense que les titres)
+                     Line-height: 1.6 (bonne lisibilité)
+                     Animation: fadeInUp avec délai de 0.4s
+                     ───────────────────────────────────────────────────────────────
+                -->
                 <p class="hero-description">
                     Je crée des expériences web uniques et captivantes qui allient créativité, 
                     fonctionnalité et performance. Spécialisée dans le design responsive et 
                     l'interface utilisateur moderne.
                 </p>
                 
-                <!-- Boutons d'action CTA (Call To Action) -->
+                <!-- ═══════════════════════════════════════════════════════════════
+                     BOUTONS CTA (Call To Action)
+                     ═══════════════════════════════════════════════════════════════
+                     Container: hero-buttons (flex avec gap: 1.5rem)
+                     2 boutons avec styles différents pour hiérarchie visuelle
+                     Animation: fadeInUp avec délai de 0.6s
+                     ═══════════════════════════════════════════════════════════════
+                -->
                 <div class="hero-buttons">
-                    <a href="#portfolio" class="btn btn-primary">Voir mes projets</a> <!-- Bouton principal avec dégradé -->
-                    <a href="#contact" class="btn btn-secondary">Me contacter</a> <!-- Bouton secondaire transparent -->
+                    <!-- ───────────────────────────────────────────────────────────
+                         BOUTON PRINCIPAL (Primary)
+                         ───────────────────────────────────────────────────────────
+                         <a> utilisé car c'est un lien, pas un bouton de formulaire
+                         Classes: btn btn-primary
+                         Style: Fond dégradé (violet → rose)
+                         Effet: Ripple au clic (cercle qui s'agrandit)
+                         Hover: Scale(1.05) + shadow élargie
+                         href="#portfolio" = ancre vers section Portfolio
+                         ───────────────────────────────────────────────────────────
+                    -->
+                    <a href="#portfolio" class="btn btn-primary">Voir mes projets</a>
+                    
+                    <!-- ───────────────────────────────────────────────────────────
+                         BOUTON SECONDAIRE (Secondary)
+                         ───────────────────────────────────────────────────────────
+                         Classes: btn btn-secondary
+                         Style: Fond transparent avec glassmorphisme
+                         Border: 2px solid blanc semi-transparent
+                         Backdrop-filter: blur(10px)
+                         Hiérarchie: Moins important que btn-primary
+                         href="#contact" = ancre vers section Contact
+                         ───────────────────────────────────────────────────────────
+                    -->
+                    <a href="#contact" class="btn btn-secondary">Me contacter</a>
                 </div>
             </div>
             
-            <!-- COLONNE DROITE - Image de profil avec effets -->
+            <!-- ═══════════════════════════════════════════════════════════════════
+                 COLONNE DROITE - IMAGE DE PROFIL + ICÔNES FLOTTANTES
+                 ═══════════════════════════════════════════════════════════════════
+                 Classe: hero-image
+                 Animation: fadeInUp avec délai de 0.8s
+                 Position: relative (pour positioning des icônes enfants)
+                 ═══════════════════════════════════════════════════════════════════
+            -->
             <div class="hero-image">
-                <div class="image-container"> <!-- Container pour positionnement des icônes -->
+                <!-- ───────────────────────────────────────────────────────────────
+                     CONTAINER D'IMAGE
+                     ───────────────────────────────────────────────────────────────
+                     Classe: image-container
+                     Position: relative (référence pour les icônes absolues)
+                     Rôle: Wrapper pour l'image + icônes flottantes
+                     ───────────────────────────────────────────────────────────────
+                -->
+                <div class="image-container">
                     
-                    <!-- Image de profil circulaire avec bordure et ombre -->
+                    <!-- ───────────────────────────────────────────────────────────
+                         IMAGE DE PROFIL
+                         ───────────────────────────────────────────────────────────
+                         <img> = Élément image
+                         src = Chemin relatif vers l'image (dossier images/)
+                         alt = Texte alternatif pour accessibilité + SEO
+                         Classe: profile-img
+                         
+                         STYLES CSS:
+                         - Width: 400px (responsive: 300px mobile)
+                         - Border-radius: 50% (forme circulaire)
+                         - Border: 4px solid avec dégradé
+                         - Box-shadow: 0 20px 60px rgba(0,0,0,0.3)
+                         - Animation: float (mouvement haut-bas infini)
+                         ───────────────────────────────────────────────────────────
+                    -->
                     <img src="images/slide07.png" alt="StephGraph - WebDesigner & Développeur" class="profile-img">
                     
-                    <!-- Icônes flottantes positionnées autour de l'image -->
-                    <div class="floating-elements"> <!-- Container absolu pour les icônes -->
-                        <div class="floating-icon icon-1"><i class="fab fa-html5"></i></div> <!-- HTML5 - Position: haut droite -->
-                        <div class="floating-icon icon-2"><i class="fab fa-css3-alt"></i></div> <!-- CSS3 - Position: haut gauche -->
-                        <div class="floating-icon icon-3"><i class="fab fa-js-square"></i></div> <!-- JavaScript - Position: bas droite -->
-                        <div class="floating-icon icon-4"><i class="fab fa-figma"></i></div> <!-- Figma - Position: bas gauche -->
+                    <!-- ═══════════════════════════════════════════════════════════
+                         ICÔNES FLOTTANTES (Technologies Maîtrisées)
+                         ═══════════════════════════════════════════════════════════
+                         Container: floating-elements (position: absolute)
+                         4 icônes positionnées autour de l'image
+                         Chaque icône a une classe unique (icon-1 à icon-4)
+                         ═══════════════════════════════════════════════════════════
+                    -->
+                    <div class="floating-elements">
+                        <!-- ───────────────────────────────────────────────────────
+                             ICÔNE 1 - HTML5 (Haut Droite)
+                             ───────────────────────────────────────────────────────
+                             Position: top: 10%, right: 0%
+                             Animation: float avec délai de 0s
+                             Hover: scale(1.2) + rotate(360deg)
+                             Background: Fond blanc glassmorphisme
+                             Icon: Font Awesome fab fa-html5
+                             ───────────────────────────────────────────────────────
+                        -->
+                        <div class="floating-icon icon-1">
+                            <i class="fab fa-html5"></i> <!-- Icône HTML5 de Font Awesome -->
+                        </div>
+                        
+                        <!-- ───────────────────────────────────────────────────────
+                             ICÔNE 2 - CSS3 (Haut Gauche)
+                             ───────────────────────────────────────────────────────
+                             Position: top: 10%, left: 0%
+                             Animation: float avec délai de 0.5s
+                             Icon: Font Awesome fab fa-css3-alt
+                             ───────────────────────────────────────────────────────
+                        -->
+                        <div class="floating-icon icon-2">
+                            <i class="fab fa-css3-alt"></i> <!-- Icône CSS3 de Font Awesome -->
+                        </div>
+                        
+                        <!-- ───────────────────────────────────────────────────────
+                             ICÔNE 3 - JavaScript (Bas Droite)
+                             ───────────────────────────────────────────────────────
+                             Position: bottom: 10%, right: 0%
+                             Animation: float avec délai de 1s
+                             Icon: Font Awesome fab fa-js-square
+                             ───────────────────────────────────────────────────────
+                        -->
+                        <div class="floating-icon icon-3">
+                            <i class="fab fa-js-square"></i> <!-- Icône JavaScript de Font Awesome -->
+                        </div>
+                        
+                        <!-- ───────────────────────────────────────────────────────
+                             ICÔNE 4 - Figma (Bas Gauche)
+                             ───────────────────────────────────────────────────────
+                             Position: bottom: 10%, left: 0%
+                             Animation: float avec délai de 1.5s
+                             Icon: Font Awesome fab fa-figma
+                             ───────────────────────────────────────────────────────
+                        -->
+                        <div class="floating-icon icon-4">
+                            <i class="fab fa-figma"></i> <!-- Icône Figma de Font Awesome -->
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 
-        ============================================
-        SECTION À PROPOS
-        ============================================
-        - Présentation du parcours professionnel
-        - Grille de compétences avec icônes
-        - Statistiques animées (compteurs)
-        - Fond avec effet radial gradient
+    <!-- ═══════════════════════════════════════════════════════════════════════════
+         SECTION 3: À PROPOS (About)
+         ═══════════════════════════════════════════════════════════════════════════
+         RÔLE: Présentation du parcours, compétences et statistiques
+         
+         STRUCTURE:
+           - Section-header: Titre + sous-titre
+           - About-content: 2 colonnes (texte + grille de compétences)
+           - About-stats: 4 statistiques avec compteurs animés
+         
+         CONTENU:
+           - Texte de présentation avec 3 paragraphes
+           - Grille de 6 compétences (HTML, CSS, JS, React, Node.js, Figma)
+           - 4 stats: Années d'expérience, projets, clients, taux satisfaction
+         
+         EFFETS VISUELS:
+           - Background: radial-gradient centré
+           - Animations: fadeInUp sur chaque bloc
+           - Compteurs: Intersection Observer (animation au scroll)
+           - Skills: Hover avec scale(1.05) + rotation(3deg)
+         
+         RESPONSIVE:
+           - Desktop: 2 colonnes texte + grille
+           - Mobile: 1 colonne empilée
+         ═══════════════════════════════════════════════════════════════════════════
     -->
-    <section id="about" class="about"> <!-- Section avec fond gris clair -->
-        <div class="container"> <!-- Container centré avec largeur max -->
+    <section id="about" class="about">
+        <!-- ───────────────────────────────────────────────────────────────────────
+             CONTAINER PRINCIPAL
+             ───────────────────────────────────────────────────────────────────────
+             Classe: container (réutilisable)
+             Max-width: 1200px
+             Margin: 0 auto (centré)
+             Padding: 0 2rem (espacement latéral)
+             ───────────────────────────────────────────────────────────────────────
+        -->
+        <div class="container">
             
-            <!-- EN-TÊTE DE SECTION - Répété dans toutes les sections -->
+            <!-- ═══════════════════════════════════════════════════════════════════
+                 EN-TÊTE DE SECTION (Pattern répété sur toutes les sections)
+                 ═══════════════════════════════════════════════════════════════════
+                 Classe: section-header
+                 Text-align: center
+                 Margin-bottom: 4rem (64px d'espace sous l'en-tête)
+                 Animation: fadeInUp
+                 ═══════════════════════════════════════════════════════════════════
+            -->
             <div class="section-header">
-                <h2 class="section-title">À propos de moi</h2> <!-- Titre avec soulignement animé -->
-                <p class="section-subtitle">Découvrez mon parcours et mes compétences</p> <!-- Sous-titre descriptif -->
+                <!-- ───────────────────────────────────────────────────────────────
+                     TITRE DE SECTION - H2
+                     ───────────────────────────────────────────────────────────────
+                     Classe: section-title
+                     Font-size: 2.5rem (40px)
+                     Position: relative (pour le ::after underline)
+                     ::after = Barre de soulignement dégradée (100px × 4px)
+                     ───────────────────────────────────────────────────────────────
+                -->
+                <h2 class="section-title">À propos de moi</h2>
+                
+                <!-- ───────────────────────────────────────────────────────────────
+                     SOUS-TITRE DE SECTION - P
+                     ───────────────────────────────────────────────────────────────
+                     Classe: section-subtitle
+                     Font-size: 1.1rem
+                     Couleur: Gris moyen
+                     Rôle: Donne contexte supplémentaire au titre
+                     ───────────────────────────────────────────────────────────────
+                -->
+                <p class="section-subtitle">Découvrez mon parcours et mes compétences</p>
             </div>
             
-            <!-- CONTENU EN GRID - 2 colonnes: texte + stats -->
+            <!-- ═══════════════════════════════════════════════════════════════════
+                 CONTENU PRINCIPAL - GRID 2 COLONNES
+                 ═══════════════════════════════════════════════════════════════════
+                 Classe: about-content
+                 Display: Grid avec 2 colonnes égales (1fr 1fr)
+                 Gap: 4rem (espace entre colonnes)
+                 Align-items: center (alignement vertical)
+                 ═══════════════════════════════════════════════════════════════════
+            -->
             <div class="about-content">
-                <!-- COLONNE 1 - Texte de présentation et compétences -->
+                <!-- ───────────────────────────────────────────────────────────────
+                     COLONNE 1 - TEXTE DE PRÉSENTATION
+                     ───────────────────────────────────────────────────────────────
+                     Classe: about-text
+                     Contient: H3 + 3 paragraphes
+                     Animation: fadeInUp au scroll
+                     ───────────────────────────────────────────────────────────────
+                -->
                 <div class="about-text">
-                    <h3>Passionnée par le design web depuis 2018</h3> <!-- Sous-titre avec animation reveal -->
+                    <!-- ───────────────────────────────────────────────────────────
+                         TITRE SECONDAIRE - H3
+                         ───────────────────────────────────────────────────────────
+                         Font-size: 1.8rem
+                         Margin-bottom: 1.5rem
+                         Color: Blanc pur
+                         ───────────────────────────────────────────────────────────
+                    -->
+                    <h3>Passionnée par le design web depuis 2018</h3>
+                    
+                    <!-- ───────────────────────────────────────────────────────────
+                         PARAGRAPHE 1 - PRÉSENTATION
+                         ───────────────────────────────────────────────────────────
+                         <p> = Paragraphe de texte
+                         Line-height: 1.8 (espacement pour lisibilité)
+                         Color: rgba(255,255,255,0.8) (blanc légèrement transparent)
+                         Margin-bottom: 1rem
+                         ───────────────────────────────────────────────────────────
+                    -->
                     <p>
                         Diplômée en design graphique et autodidacte en développement web, 
                         je combine créativité artistique et expertise technique pour créer 
                         des sites web exceptionnels.
                     </p>
+                    
+                    <!-- ───────────────────────────────────────────────────────────
+                         PARAGRAPHE 2 - APPROCHE PROFESSIONNELLE
+                         ───────────────────────────────────────────────────────────
+                         Décrit la méthodologie et les valeurs
+                         UX, accessibilité, performance = priorités
+                         ───────────────────────────────────────────────────────────
+                    -->
                     <p>
                         Mon approche se concentre sur l'expérience utilisateur, 
                         l'accessibilité et les performances, tout en maintenant 
                         un design esthétique et moderne.
                     </p>
                     
+                    <!-- ═══════════════════════════════════════════════════════════
+                         GRILLE DE COMPÉTENCES (Skills Grid)
+                         ═══════════════════════════════════════════════════════════
+                         Classe: skills-grid
+                         Display: Grid avec 3 colonnes (repeat(3, 1fr))
+                         Gap: 1.5rem (24px entre les items)
+                         Contient: 6 skill-item (HTML, CSS, JS, React, Node, Figma)
+                         ═══════════════════════════════════════════════════════════
+                    -->
                     <div class="skills-grid">
+                        <!-- ───────────────────────────────────────────────────────
+                             COMPÉTENCE 1 - DESIGN UI/UX
+                             ───────────────────────────────────────────────────────
+                             Classe: skill-item
+                             Structure: icon + h4 + p
+                             Background: Glassmorphisme blanc 5%
+                             Border: 1px solid rgba(255,255,255,0.1)
+                             Hover: scale(1.05) + rotate(3deg)
+                             ───────────────────────────────────────────────────────
+                        -->
                         <div class="skill-item">
+                            <!-- ───────────────────────────────────────────────────
+                                 ICÔNE DE COMPÉTENCE
+                                 ───────────────────────────────────────────────────
+                                 Classe: skill-icon
+                                 Size: 3rem (48px)
+                                 Background: Dégradé (violet → rose)
+                                 Border-radius: 50% (cercle)
+                                 Display: flex center (icône centrée)
+                                 ───────────────────────────────────────────────────
+                            -->
                             <div class="skill-icon">
-                                <i class="fas fa-paint-brush"></i>
+                                <i class="fas fa-paint-brush"></i> <!-- Font Awesome -->
                             </div>
+                            <!-- Titre de la compétence (H4) -->
                             <h4>Design UI/UX</h4>
+                            <!-- Description courte (P) -->
                             <p>Création d'interfaces intuitives et attrayantes</p>
                         </div>
                         
+                        <!-- ───────────────────────────────────────────────────────
+                             COMPÉTENCE 2 - DÉVELOPPEMENT FRONTEND
+                             ───────────────────────────────────────────────────────
+                             Icône: fas fa-code (balises de code)
+                             Technologies: HTML5, CSS3, JavaScript, React
+                             ───────────────────────────────────────────────────────
+                        -->
                         <div class="skill-item">
                             <div class="skill-icon">
                                 <i class="fas fa-code"></i>
@@ -181,6 +670,13 @@
                             <p>HTML5, CSS3, JavaScript, React</p>
                         </div>
                         
+                        <!-- ───────────────────────────────────────────────────────
+                             COMPÉTENCE 3 - DESIGN RESPONSIVE
+                             ───────────────────────────────────────────────────────
+                             Icône: fas fa-mobile-alt (téléphone)
+                             Focus: Adaptation multi-devices (mobile, tablette, desktop)
+                             ───────────────────────────────────────────────────────
+                        -->
                         <div class="skill-item">
                             <div class="skill-icon">
                                 <i class="fas fa-mobile-alt"></i>
@@ -189,6 +685,13 @@
                             <p>Optimisation pour tous les appareils</p>
                         </div>
                         
+                        <!-- ───────────────────────────────────────────────────────
+                             COMPÉTENCE 4 - PERFORMANCE WEB
+                             ───────────────────────────────────────────────────────
+                             Icône: fas fa-rocket (fusée)
+                             Focus: Optimisation, vitesse, Core Web Vitals
+                             ───────────────────────────────────────────────────────
+                        -->
                         <div class="skill-item">
                             <div class="skill-icon">
                                 <i class="fas fa-rocket"></i>
@@ -199,19 +702,88 @@
                     </div>
                 </div>
                 
+                <!-- ═══════════════════════════════════════════════════════════════
+                     COLONNE 2 - STATISTIQUES (About Stats)
+                     ═══════════════════════════════════════════════════════════════
+                     Classe: about-stats
+                     Display: Grid 2×2 (2 colonnes, 2 lignes)
+                     4 statistiques avec compteurs animés
+                     Animation: Intersection Observer (compte de 0 → valeur finale)
+                     ═══════════════════════════════════════════════════════════════
+                -->
                 <div class="about-stats">
+                    <!-- ───────────────────────────────────────────────────────────
+                         STATISTIQUE 1 - PROJETS COMPLÉTÉS
+                         ───────────────────────────────────────────────────────────
+                         Classe: stat-item
+                         Structure: span.stat-number + span.stat-label
+                         Background: Glassmorphisme
+                         Border: 1px solid rgba(255,255,255,0.1)
+                         
+                         COMPTEUR ANIMÉ:
+                         data-count="50" = Valeur cible
+                         JavaScript IntersectionObserver détecte l'apparition
+                         Incrémente de 0 à 50 en 2 secondes
+                         ───────────────────────────────────────────────────────────
+                    -->
                     <div class="stat-item">
+                        <!-- ───────────────────────────────────────────────────────
+                             NOMBRE (Compteur)
+                             ───────────────────────────────────────────────────────
+                             <span> avec classe stat-number
+                             data-count = Attribut HTML5 personnalisé (valeur cible)
+                             JavaScript lit data-count et anime de 0 → 50
+                             Font-size: 3rem
+                             Font-weight: 700
+                             Color: Blanc pur
+                             ───────────────────────────────────────────────────────
+                        -->
                         <span class="stat-number" data-count="50">0</span>
+                        <!-- ───────────────────────────────────────────────────────
+                             LABEL (Description)
+                             ───────────────────────────────────────────────────────
+                             <span> avec classe stat-label
+                             Font-size: 1rem
+                             Color: rgba(255,255,255,0.7)
+                             Text-transform: uppercase (MAJUSCULES)
+                             Letter-spacing: 1px (espacement entre lettres)
+                             ───────────────────────────────────────────────────────
+                        -->
                         <span class="stat-label">Projets Réalisés</span>
                     </div>
+                    
+                    <!-- ───────────────────────────────────────────────────────────
+                         STATISTIQUE 2 - CLIENTS SATISFAITS
+                         ───────────────────────────────────────────────────────────
+                         data-count="35" → animation de 0 à 35
+                         Même structure que stat-item 1
+                         ───────────────────────────────────────────────────────────
+                    -->
                     <div class="stat-item">
                         <span class="stat-number" data-count="35">0</span>
                         <span class="stat-label">Clients Satisfaits</span>
                     </div>
+                    
+                    <!-- ───────────────────────────────────────────────────────────
+                         STATISTIQUE 3 - ANNÉES D'EXPÉRIENCE
+                         ───────────────────────────────────────────────────────────
+                         data-count="5" → animation de 0 à 5
+                         Valeur plus faible = animation plus rapide
+                         ───────────────────────────────────────────────────────────
+                    -->
                     <div class="stat-item">
                         <span class="stat-number" data-count="5">0</span>
                         <span class="stat-label">Années d'Expérience</span>
                     </div>
+                    
+                    <!-- ───────────────────────────────────────────────────────────
+                         STATISTIQUE 4 - TAUX DE SATISFACTION
+                         ───────────────────────────────────────────────────────────
+                         data-count="100" → animation de 0 à 100
+                         Label: "% Satisfaction" (avec symbole %)
+                         Statistique la plus élevée = impact visuel fort
+                         ───────────────────────────────────────────────────────────
+                    -->
                     <div class="stat-item">
                         <span class="stat-number" data-count="100">0</span>
                         <span class="stat-label">% Satisfaction</span>
@@ -221,24 +793,101 @@
         </div>
     </section>
 
-    <!-- Section Services -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════
+         SECTION 4: SERVICES
+         ═══════════════════════════════════════════════════════════════════════════
+         RÔLE: Présentation des services proposés
+         
+         STRUCTURE:
+           - Section-header: Titre + sous-titre
+           - Services-grid: Grid 3 colonnes avec 6 service-card
+         
+         CONTENU:
+           Chaque service-card contient:
+           - Icône Font Awesome (cercle dégradé)
+           - Titre H3
+           - Texte descriptif
+           - Liste de bullet points
+         
+         SERVICES LISTÉS:
+           1. Création de Sites Web
+           2. Design UI/UX
+           3. Développement Frontend
+           4. Refonte de Sites
+           5. Maintenance & Support
+           6. SEO & Performance
+         
+         EFFETS VISUELS:
+           - Glassmorphisme sur les cartes
+           - Hover: translateY(-10px) + shadow élargie
+           - Animation fadeInUp au scroll
+           - Icônes avec dégradé animé
+         
+         RESPONSIVE:
+           - Desktop: 3 colonnes
+           - Tablette: 2 colonnes
+           - Mobile: 1 colonne
+         ═══════════════════════════════════════════════════════════════════════════
+    -->
     <section id="services" class="services">
         <div class="container">
+            <!-- EN-TÊTE DE SECTION (pattern standard) -->
             <div class="section-header">
                 <h2 class="section-title">Mes Services</h2>
                 <p class="section-subtitle">Des solutions complètes pour votre présence web</p>
             </div>
             
+            <!-- ═══════════════════════════════════════════════════════════════════
+                 GRILLE DE SERVICES
+                 ═══════════════════════════════════════════════════════════════════
+                 Classe: services-grid
+                 Display: Grid avec 3 colonnes (repeat(3, 1fr))
+                 Gap: 2rem (32px entre les cartes)
+                 ═══════════════════════════════════════════════════════════════════
+            -->
             <div class="services-grid">
+                <!-- ───────────────────────────────────────────────────────────────
+                     SERVICE CARD 1 - CRÉATION DE SITES WEB
+                     ───────────────────────────────────────────────────────────────
+                     Classe: service-card
+                     Background: Glassmorphisme rgba(255,255,255,0.05)
+                     Border: 1px solid rgba(255,255,255,0.1)
+                     Border-radius: var(--border-radius)
+                     Padding: 2rem
+                     Transition: transform 0.3s, box-shadow 0.3s
+                     Hover: translateY(-10px)
+                     ───────────────────────────────────────────────────────────────
+                -->
                 <div class="service-card">
+                    <!-- ───────────────────────────────────────────────────────────
+                         ICÔNE DU SERVICE
+                         ───────────────────────────────────────────────────────────
+                         Classe: service-icon
+                         Size: 4rem (64px)
+                         Background: Dégradé (violet → rose)
+                         Border-radius: 50% (cercle)
+                         Display: flex center
+                         Margin-bottom: 1.5rem
+                         ───────────────────────────────────────────────────────────
+                    -->
                     <div class="service-icon">
-                        <i class="fas fa-laptop-code"></i>
+                        <i class="fas fa-laptop-code"></i> <!-- Icône ordinateur portable -->
                     </div>
                     <h3>Création de Sites Web</h3>
+                    <!-- Description du service (P) -->
                     <p>
                         Développement de sites web sur mesure, responsive et optimisés 
                         pour le SEO avec les dernières technologies.
                     </p>
+                    <!-- ───────────────────────────────────────────────────────────
+                         LISTE DE CARACTÉRISTIQUES
+                         ───────────────────────────────────────────────────────────
+                         <ul> classe: service-features
+                         List-style: none (pas de puces par défaut)
+                         Chaque <li> contient icône fas fa-check + texte
+                         Icône check: couleur dégradée, margin-right: 0.5rem
+                         ───────────────────────────────────────────────────────────
+                    -->
                     <ul class="service-features">
                         <li><i class="fas fa-check"></i> Design responsive</li>
                         <li><i class="fas fa-check"></i> Optimisation SEO</li>
@@ -246,6 +895,7 @@
                     </ul>
                 </div>
                 
+                <!-- SERVICE 2 - DESIGN UI/UX (Palette) -->
                 <div class="service-card">
                     <div class="service-icon">
                         <i class="fas fa-palette"></i>
@@ -262,6 +912,7 @@
                     </ul>
                 </div>
                 
+                <!-- SERVICE 3 - E-COMMERCE (Panier) -->
                 <div class="service-card">
                     <div class="service-icon">
                         <i class="fas fa-shopping-cart"></i>
@@ -278,6 +929,7 @@
                     </ul>
                 </div>
                 
+                <!-- SERVICE 4 - APPLICATIONS WEB (Mobile) -->
                 <div class="service-card">
                     <div class="service-icon">
                         <i class="fas fa-mobile-alt"></i>
@@ -288,12 +940,13 @@
                         avec React, Vue.js ou Angular.
                     </p>
                     <ul class="service-features">
-                        <li><i class="fas fa-check"></i> SPA performantes</li>
-                        <li><i class="fas fa-check"></i> PWA</li>
+                        <li><i class="fas fa-check"></i> SPA performantes</li> <!-- Single Page Application -->
+                        <li><i class="fas fa-check"></i> PWA</li> <!-- Progressive Web App -->
                         <li><i class="fas fa-check"></i> API intégration</li>
                     </ul>
                 </div>
                 
+                <!-- SERVICE 5 - MAINTENANCE & SUPPORT (Outils) -->
                 <div class="service-card">
                     <div class="service-icon">
                         <i class="fas fa-tools"></i>
@@ -310,6 +963,7 @@
                     </ul>
                 </div>
                 
+                <!-- SERVICE 6 - AUDIT & OPTIMISATION (Recherche) -->
                 <div class="service-card">
                     <div class="service-icon">
                         <i class="fas fa-search"></i>
@@ -329,7 +983,30 @@
         </div>
     </section>
 
-    <!-- Section Portfolio -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════
+         SECTION 5: PORTFOLIO (Galerie de Projets)
+         ═══════════════════════════════════════════════════════════════════════════
+         RÔLE: Présentation des projets avec système de filtrage dynamique
+         
+         STRUCTURE:
+           - Section-header: Titre + sous-titre
+           - Portfolio-filters: 5 boutons (Tous, Web, App, E-commerce, Design)
+           - Portfolio-grid: Grid responsive avec 6 projets
+         
+         SYSTÈME DE FILTRAGE:
+           - Boutons: data-filter (all/web/app/ecommerce/design)
+           - Items: data-category (web/app/ecommerce/design)
+           - JavaScript compare et affiche/cache les items correspondants
+           - Animation: Transition opacity + transform
+         
+         INTERACTION MODAL:
+           - Clic sur icône œil: Ouvre modal avec détails projet
+           - data-project="X" → récupère projectData[X] en JavaScript
+           - Modal affiche: grande image + description + technologies + lien
+         
+         RESPONSIVE: 3 colonnes desktop → 2 tablette → 1 mobile
+         ═══════════════════════════════════════════════════════════════════════════
+    -->
     <section id="portfolio" class="portfolio">
         <div class="container">
             <div class="section-header">
@@ -337,15 +1014,38 @@
                 <p class="section-subtitle">Découvrez quelques-uns de mes projets récents</p>
             </div>
             
+            <!-- ═══════════════════════════════════════════════════════════════════
+                 BARRE DE FILTRAGE
+                 ═══════════════════════════════════════════════════════════════════
+                 Classe: portfolio-filters | Display: flex center | Gap: 1rem
+                 5 boutons avec data-filter | .active = bouton sélectionné
+                 JavaScript: Gère le clic + filtrage des projets
+                 ═══════════════════════════════════════════════════════════════════
+            -->
             <div class="portfolio-filters">
-                <button class="filter-btn active" data-filter="all">Tous</button>
+                <button class="filter-btn active" data-filter="all">Tous</button> <!-- Actif par défaut -->
                 <button class="filter-btn" data-filter="web">Sites Web</button>
                 <button class="filter-btn" data-filter="app">Applications</button>
                 <button class="filter-btn" data-filter="ecommerce">E-commerce</button>
                 <button class="filter-btn" data-filter="design">Design</button>
             </div>
             
+            <!-- ═══════════════════════════════════════════════════════════════════
+                 GRILLE DE PROJETS (Portfolio Grid)
+                 ═══════════════════════════════════════════════════════════════════
+                 Display: Grid avec repeat(auto-fit, minmax(300px, 1fr))
+                 Gap: 2rem | Auto-ajustement responsive
+                 6 portfolio-item avec overlay au survol
+                 ═══════════════════════════════════════════════════════════════════
+            -->
             <div class="portfolio-grid">
+                <!-- ───────────────────────────────────────────────────────────────
+                     PROJET 1 - FIGHT CLUB (Catégorie: web)
+                     ───────────────────────────────────────────────────────────────
+                     data-category="web" pour filtrage
+                     Structure: image + overlay (H3 + P + 2 liens)
+                     ───────────────────────────────────────────────────────────────
+                -->
                 <div class="portfolio-item" data-category="web">
                     <div class="portfolio-image">
                         <img src="images/Capture d’écran projet 01.png" alt="Salle de sport Fight Club">
@@ -366,6 +1066,7 @@
                     </div>
                 </div>
                 
+                <!-- PROJET 2 - WHATSAPP (Catégorie: app) | data-project="2" -->
                 <div class="portfolio-item" data-category="app">
                     <div class="portfolio-image">
                         <img src="images/Capture décran projet 05.png" alt="Application messagerie">
@@ -375,10 +1076,10 @@
                                 <p>Application de messagerie</p>
                                 <div class="portfolio-links">
                                     <a href="#" class="portfolio-link" data-project="2">
-                                        <i class="fas fa-eye"></i>
+                                        <i class="fas fa-eye"></i> <!-- Ouvre modal projet 2 -->
                                     </a>
                                     <a href="#" class="portfolio-link">
-                                        <i class="fas fa-external-link-alt"></i>
+                                        <i class="fas fa-external-link-alt"></i> <!-- Lien externe -->
                                     </a>
                                 </div>
                             </div>
@@ -386,6 +1087,7 @@
                     </div>
                 </div>
                 
+                <!-- PROJET 3 - FASHIONSTYLE (Catégorie: ecommerce) | data-project="3" -->
                 <div class="portfolio-item" data-category="ecommerce">
                     <div class="portfolio-image">
                         <img src="images/Capture décran projet 07.png" alt="Boutique FashionStyle">
@@ -469,7 +1171,15 @@
         </div>
     </section>
 
-    <!-- Section Contact -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════
+         SECTION 6: CONTACT (Formulaire de Contact + Informations)
+         ═══════════════════════════════════════════════════════════════════════════
+         RÔLE: Permettre aux visiteurs d'envoyer un message
+         STRUCTURE: 2 colonnes (Contact-info gauche + Contact-form droite)
+         VALIDATION: HTML5 required + JavaScript preventDefault + Toast notification
+         RESPONSIVE: 2 colonnes → 1 colonne mobile
+         ═══════════════════════════════════════════════════════════════════════════
+    -->
     <section id="contact" class="contact">
         <div class="container">
             <div class="section-header">
@@ -477,7 +1187,15 @@
                 <p class="section-subtitle">Discutons de votre prochain projet</p>
             </div>
             
+            <!-- Container 2 colonnes: infos + formulaire | Display: Grid 2 colonnes -->
             <div class="contact-content">
+                <!-- ═══════════════════════════════════════════════════════════════
+                     COLONNE 1 - INFORMATIONS DE CONTACT
+                     ═══════════════════════════════════════════════════════════════
+                     4 contact-item: Email, Téléphone, Localisation, Réseaux sociaux
+                     Structure: icône + titre H4 + texte/lien
+                     ═══════════════════════════════════════════════════════════════
+                -->
                 <div class="contact-info">
                     <h3>Restons en contact</h3>
                     <p>
@@ -485,7 +1203,9 @@
                         N'hésitez pas à me contacter pour discuter de votre projet.
                     </p>
                     
+                    <!-- Container des 4 items de contact -->
                     <div class="contact-items">
+                        <!-- ITEM 1 - EMAIL (fa-envelope) -->
                         <div class="contact-item">
                             <div class="contact-icon">
                                 <i class="fas fa-envelope"></i>
@@ -496,6 +1216,7 @@
                             </div>
                         </div>
                         
+                        <!-- ITEM 2 - TÉLÉPHONE (fa-phone) -->
                         <div class="contact-item">
                             <div class="contact-icon">
                                 <i class="fas fa-phone"></i>
@@ -506,6 +1227,7 @@
                             </div>
                         </div>
                         
+                        <!-- ITEM 3 - LOCALISATION (fa-map-marker-alt) -->
                         <div class="contact-item">
                             <div class="contact-icon">
                                 <i class="fas fa-map-marker-alt"></i>
@@ -517,40 +1239,54 @@
                         </div>
                     </div>
                     
+                    <!-- ═══════════════════════════════════════════════════════════
+                         RÉSEAUX SOCIAUX (Social Links)
+                         ═══════════════════════════════════════════════════════════
+                         Display: flex gap: 1rem
+                         4 liens sociaux avec icônes circulaires
+                         Hover: scale(1.1) + rotate(360deg)
+                         ═══════════════════════════════════════════════════════════
+                    -->
                     <div class="social-links">
-                        <a href="#" class="social-link">
-                            <i class="fab fa-linkedin-in"></i>
-                        </a>
-                        <a href="#" class="social-link">
-                            <i class="fab fa-dribbble"></i>
-                        </a>
-                        <a href="#" class="social-link">
-                            <i class="fab fa-behance"></i>
-                        </a>
-                        <a href="#" class="social-link">
-                            <i class="fab fa-instagram"></i>
-                        </a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a> <!-- LinkedIn -->
+                        <a href="#" class="social-link"><i class="fab fa-dribbble"></i></a> <!-- Dribbble -->
+                        <a href="#" class="social-link"><i class="fab fa-behance"></i></a> <!-- Behance -->
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a> <!-- Instagram -->
                     </div>
                 </div>
                 
+                <!-- ═══════════════════════════════════════════════════════════════
+                     COLONNE 2 - FORMULAIRE DE CONTACT
+                     ═══════════════════════════════════════════════════════════════
+                     <form> id="contactForm" (géré par JavaScript)
+                     5 champs: Nom, Email, Sujet, Message, Bouton submit
+                     Validation HTML5: required, type="email"
+                     JavaScript: preventDefault + affiche toast notification
+                     ═══════════════════════════════════════════════════════════════
+                -->
                 <div class="contact-form">
                     <form id="contactForm">
+                        <!-- CHAMP 1 - NOM (input text, required) -->
                         <div class="form-group">
                             <input type="text" id="name" name="name" placeholder="Votre nom" required>
                         </div>
                         
+                        <!-- CHAMP 2 - EMAIL (input email, required) -->
                         <div class="form-group">
                             <input type="email" id="email" name="email" placeholder="Votre email" required>
                         </div>
                         
+                        <!-- CHAMP 3 - SUJET (input text, required) -->
                         <div class="form-group">
                             <input type="text" id="subject" name="subject" placeholder="Sujet" required>
                         </div>
                         
+                        <!-- CHAMP 4 - MESSAGE (textarea, 6 rows, required) -->
                         <div class="form-group">
                             <textarea id="message" name="message" placeholder="Votre message" rows="6" required></textarea>
                         </div>
                         
+                        <!-- BOUTON SUBMIT (btn btn-primary avec icône) -->
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-paper-plane"></i>
                             Envoyer le message
@@ -561,13 +1297,23 @@
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════
+         FOOTER (Pied de Page)
+         ═══════════════════════════════════════════════════════════════════════════
+         RÔLE: Copyright + liens de navigation rapide
+         STRUCTURE: 2 colonnes (Copyright gauche + Menu droite)
+         STYLE: Background rgba(0,0,0,0.2), padding: 2rem 0
+         RESPONSIVE: 2 colonnes → 1 colonne centrée mobile
+         ═══════════════════════════════════════════════════════════════════════════
+    -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
+                <!-- Copyright text -->
                 <div class="footer-text">
                     <p>&copy; 2025 StephGraph - WebDesigner. Tous droits réservés.</p>
                 </div>
+                <!-- Liens de navigation (répétition du menu principal) -->
                 <div class="footer-links">
                     <a href="#home">Accueil</a>
                     <a href="#about">À propos</a>
@@ -579,26 +1325,72 @@
         </div>
     </footer>
 
-    <!-- Modal Portfolio -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════
+         MODAL PORTFOLIO (Popup Détails Projet)
+         ═══════════════════════════════════════════════════════════════════════════
+         RÔLE: Afficher les détails complets d'un projet en overlay
+         
+         DÉCLENCHEMENT:
+           - Clic sur icône œil (fas fa-eye) dans portfolio-item
+           - Élément <a> avec data-project="X"
+           - JavaScript lit data-project et charge projectData[X]
+         
+         CONTENU DYNAMIQUE (rempli par JavaScript):
+           - #modalImage: Grande image du projet
+           - #modalTitle: Titre du projet
+           - #modalDescription: Description longue
+           - #modalTech: Liste des technologies (span tags)
+           - #modalLiveLink: Lien vers le site live
+           - #modalCodeLink: Lien vers le code source GitHub
+         
+         FERMETURE:
+           - Clic sur × (modal-close)
+           - Clic en dehors (sur modal background)
+           - Touche Escape (écouteur JavaScript)
+         
+         STYLE:
+           - Position: fixed (recouvre toute la page)
+           - Background: rgba(0,0,0,0.9) (noir 90%)
+           - Modal-content: max-width 900px, glassmorphisme
+           - Z-index: 1000 (au-dessus de tout)
+           - Display: none par défaut → flex quand .active
+         ═══════════════════════════════════════════════════════════════════════════
+    -->
     <div id="portfolioModal" class="modal">
         <div class="modal-content">
+            <!-- Bouton fermeture × (modal-close) -->
             <span class="modal-close">&times;</span>
+            
+            <!-- Corps du modal (2 colonnes: image + info) -->
             <div class="modal-body">
+                <!-- COLONNE 1 - IMAGE DU PROJET -->
                 <div class="modal-image">
+                    <!-- Image dynamique (src rempli par JavaScript) -->
                     <img id="modalImage" src="" alt="">
                 </div>
+                
+                <!-- COLONNE 2 - INFORMATIONS DU PROJET -->
                 <div class="modal-info">
+                    <!-- Titre (H3, rempli dynamiquement) -->
                     <h3 id="modalTitle"></h3>
+                    <!-- Description longue (P, rempli dynamiquement) -->
                     <p id="modalDescription"></p>
+                    
+                    <!-- Section technologies utilisées -->
                     <div class="modal-tech">
                         <h4>Technologies utilisées :</h4>
+                        <!-- Tags technos (span générés par JS) -->
                         <div id="modalTech" class="tech-tags"></div>
                     </div>
+                    
+                    <!-- Liens d'action (2 boutons) -->
                     <div class="modal-links">
+                        <!-- Bouton 1: Voir le site (href rempli par JS) -->
                         <a href="#" id="modalLiveLink" class="btn btn-primary" target="_blank">
                             <i class="fas fa-external-link-alt"></i>
                             Voir le site
                         </a>
+                        <!-- Bouton 2: Code source GitHub (href rempli par JS) -->
                         <a href="#" id="modalCodeLink" class="btn btn-secondary" target="_blank">
                             <i class="fab fa-github"></i>
                             Code source
@@ -609,7 +1401,14 @@
         </div>
     </div>
 
-    <!-- JavaScript -->
+    <!-- ═══════════════════════════════════════════════════════════════════════════
+         SCRIPT JAVASCRIPT
+         ═══════════════════════════════════════════════════════════════════════════
+         <script> lié à script.js (fichier externe)
+         Placé avant </body> pour assurer que le DOM est chargé
+         Contient toutes les fonctionnalités interactives du site
+         ═══════════════════════════════════════════════════════════════════════════
+    -->
     <script src="script.js"></script>
 </body>
 </html>
